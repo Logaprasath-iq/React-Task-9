@@ -1,10 +1,6 @@
 import React from 'react';
 import OnboardingIllustration from './OnboardingIllustration';
-import PageIndicator from '../common/PageIndicator';
-import PrimaryButton from '../common/PrimaryButton';
-import SecondaryButton from '../common/SecondaryButton';
 import { onboardingSlides } from '../../data/mockData';
-import { Sparkles } from 'lucide-react';
 import '../../styles/onboarding.css';
 
 export default function OnboardingScreen({
@@ -20,57 +16,70 @@ export default function OnboardingScreen({
 
   return (
     <div className="onboarding-container">
-      {/* Upper Purple Section */}
+      {/* Upper Purple Gradient Section with 3D Floating Cards */}
       <div className="onboarding-upper">
-        <div className="onboarding-brand-pill">
-          <Sparkles size={14} />
-          <span>WORKMATE</span>
-        </div>
-
-        <div className="onboarding-illustration-box">
-          <OnboardingIllustration step={currentStep} />
-        </div>
+        <OnboardingIllustration step={currentStep} />
       </div>
 
-      {/* Lower White Card Section */}
+      {/* Lower White Section */}
       <div className="onboarding-lower">
         <div className="onboarding-text-content">
-          <PageIndicator
-            total={4}
-            activeIndex={currentStep - 1}
-            onSelect={onStepSelect}
-          />
-
           <h1 className="onboarding-title">{slide.title}</h1>
           <p className="onboarding-description">{slide.description}</p>
+
+          {/* Indicator row matching screenshot */}
+          <div className="page-indicator-row">
+            {[1, 2, 3, 4].map((stepNum, idx) => {
+              const isActive = stepNum === currentStep;
+              return (
+                <button
+                  key={stepNum}
+                  type="button"
+                  className={`indicator-bar ${isActive ? 'active' : 'inactive'}`}
+                  onClick={() => onStepSelect && onStepSelect(idx)}
+                  aria-label={`Go to slide ${stepNum}`}
+                />
+              );
+            })}
+          </div>
         </div>
 
         {/* Action Buttons */}
         <div className="onboarding-actions">
           {!isLastStep ? (
-            <div className="onboarding-split-actions">
-              <SecondaryButton
-                onClick={onSkip}
-                style={{ flex: 1 }}
-              >
-                Skip
-              </SecondaryButton>
-              <PrimaryButton
+            <>
+              <button
+                type="button"
+                className="btn-pill-primary"
                 onClick={onNext}
-                style={{ flex: 1.4 }}
               >
                 Next
-              </PrimaryButton>
-            </div>
+              </button>
+              <button
+                type="button"
+                className="btn-pill-skip"
+                onClick={onSkip}
+              >
+                Skip
+              </button>
+            </>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
-              <PrimaryButton onClick={onSignIn} size="lg">
+            <>
+              <button
+                type="button"
+                className="btn-pill-primary"
+                onClick={onSignIn}
+              >
                 Sign In
-              </PrimaryButton>
-              <SecondaryButton onClick={onSignUp} size="lg">
+              </button>
+              <button
+                type="button"
+                className="btn-pill-skip"
+                onClick={onSignUp}
+              >
                 Sign Up
-              </SecondaryButton>
-            </div>
+              </button>
+            </>
           )}
         </div>
       </div>

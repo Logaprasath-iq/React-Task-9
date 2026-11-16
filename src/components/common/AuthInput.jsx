@@ -41,16 +41,16 @@ export default function AuthInput({
         style={{
           display: 'flex',
           alignItems: 'center',
-          background: isFocused ? 'var(--bg-input-focus)' : 'var(--bg-input)',
+          background: isFocused ? '#FFFFFF' : '#FAFAFE',
           border: error
-            ? '1.5px solid var(--status-red)'
+            ? '1.5px solid #ED2E7E'
             : isFocused
-            ? '1.5px solid var(--primary-purple)'
-            : '1.5px solid var(--border-light)',
-          borderRadius: 'var(--radius-md)',
-          padding: '0 14px',
-          height: '50px',
-          boxShadow: isFocused ? '0 0 0 3px rgba(108, 92, 231, 0.12)' : 'none',
+            ? '1.5px solid #7146FD'
+            : '1.5px solid #EDEDF8',
+          borderRadius: '16px',
+          padding: '0 16px',
+          height: '52px',
+          boxShadow: isFocused ? '0 0 0 3px rgba(113, 70, 253, 0.12)' : 'none',
           transition: 'all 0.2s ease',
           gap: '10px'
         }}

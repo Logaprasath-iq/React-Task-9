@@ -17,9 +17,9 @@ export default function PrimaryButton({
     switch (variant) {
       case 'outline':
         return {
-          background: 'transparent',
-          border: '1.5px solid var(--primary-purple)',
-          color: 'var(--primary-purple)',
+          background: '#FFFFFF',
+          border: '1.5px solid #D5CCFD',
+          color: '#7146FD',
           boxShadow: 'none'
         };
       case 'soft':
@@ -39,10 +39,10 @@ export default function PrimaryButton({
       case 'gradient':
       default:
         return {
-          background: 'var(--purple-gradient)',
+          background: 'linear-gradient(135deg, #7952FC 0%, #5833EA 100%)',
           border: 'none',
           color: '#FFFFFF',
-          boxShadow: 'var(--shadow-purple-btn)'
+          boxShadow: '0 10px 24px rgba(113, 70, 253, 0.35)'
         };
     }
   };
@@ -50,12 +50,12 @@ export default function PrimaryButton({
   const getSizeStyles = () => {
     switch (size) {
       case 'sm':
-        return { padding: '10px 18px', fontSize: '13px', borderRadius: 'var(--radius-sm)' };
+        return { padding: '10px 18px', fontSize: '13px', borderRadius: 'var(--radius-full)' };
       case 'lg':
-        return { padding: '16px 28px', fontSize: '16px', borderRadius: 'var(--radius-md)' };
+        return { height: '52px', padding: '0 24px', fontSize: '16px', borderRadius: 'var(--radius-full)' };
       case 'md':
       default:
-        return { padding: '14px 22px', fontSize: '15px', borderRadius: 'var(--radius-md)' };
+        return { height: '48px', padding: '0 20px', fontSize: '15px', borderRadius: 'var(--radius-full)' };
     }
   };
 
@@ -70,7 +70,7 @@ export default function PrimaryButton({
         alignItems: 'center',
         justifyContent: 'center',
         gap: '8px',
-        fontWeight: '600',
+        fontWeight: '700',
         width: fullWidth ? '100%' : 'auto',
         cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.6 : 1,
