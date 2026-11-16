@@ -105,8 +105,6 @@ export default function SignIn() {
           =================================================================== */}
       {activeMethod === 'email' && (
         <div className="signin-bottom-sheet">
-          <div className="signin-sheet-handle" />
-
           <div className="signin-sheet-header">
             <h1 className="signin-sheet-title">Sign In</h1>
             <p className="signin-sheet-subtitle">Sign in to my account</p>
@@ -248,8 +246,6 @@ export default function SignIn() {
           =================================================================== */}
       {activeMethod === 'phone' && (
         <div className="signin-bottom-sheet">
-          <div className="signin-sheet-handle" />
-
           <div className="signin-sheet-header">
             <h1 className="signin-sheet-title">Sign In</h1>
             <p className="signin-sheet-subtitle">Sign in to my account</p>
@@ -461,8 +457,6 @@ export default function SignIn() {
           =================================================================== */}
       {activeMethod === 'employee' && (
         <div className="signin-bottom-sheet">
-          <div className="signin-sheet-handle" />
-
           <div className="signin-sheet-header">
             <h1 className="signin-sheet-title">Sign In</h1>
             <p className="signin-sheet-subtitle">Sign in to my account</p>
