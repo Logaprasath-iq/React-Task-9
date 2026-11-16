@@ -17,7 +17,8 @@ export default function Home({
   onToggleEmptyState,
   activeTab: propTab,
   onTabChange: propOnTabChange,
-  initialTaskSubScreen = 'main'
+  initialTaskSubScreen = 'main',
+  initialExpenseSubScreen = 'main'
 }) {
   const [internalTab, setInternalTab] = useState('home');
   const activeTab = propTab !== undefined ? propTab : internalTab;
@@ -31,11 +32,21 @@ export default function Home({
   // 'main' | 'create-task' | 'details' | 'zoom' | 'burnout-stats'
   const [taskSubScreen, setTaskSubScreen] = useState(initialTaskSubScreen);
 
+  // Sub-screen state inside the Expense flow:
+  // 'main' | 'submit-expense'
+  const [expenseSubScreen, setExpenseSubScreen] = useState(initialExpenseSubScreen);
+
   useEffect(() => {
     if (initialTaskSubScreen) {
       setTaskSubScreen(initialTaskSubScreen);
     }
   }, [initialTaskSubScreen]);
+
+  useEffect(() => {
+    if (initialExpenseSubScreen) {
+      setExpenseSubScreen(initialExpenseSubScreen);
+    }
+  }, [initialExpenseSubScreen]);
 
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
@@ -45,7 +56,8 @@ export default function Home({
   // Bottom navigation should only be shown on main tabs, and hidden during sub-flows like map, camera, review, or details
   const isBottomNavVisible =
     !(activeTab === 'clockin' && clockInSubScreen !== 'main') &&
-    !(activeTab === 'tasks' && taskSubScreen !== 'main');
+    !(activeTab === 'tasks' && taskSubScreen !== 'main') &&
+    !(activeTab === 'expense' && expenseSubScreen !== 'main');
 
   return (
     <div
@@ -95,7 +107,8 @@ export default function Home({
         {activeTab === 'expense' && (
           <ExpenseView
             isEmpty={isEmptyState}
-            onOpenClaimExpense={() => setIsExpenseModalOpen(true)}
+            subScreen={expenseSubScreen}
+            onSubScreenChange={setExpenseSubScreen}
           />
         )}
 
@@ -115,6 +128,7 @@ export default function Home({
             setActiveTab(tab);
             if (tab === 'clockin') setClockInSubScreen('main');
             if (tab === 'tasks') setTaskSubScreen('main');
+            if (tab === 'expense') setExpenseSubScreen('main');
           }}
         />
       )}

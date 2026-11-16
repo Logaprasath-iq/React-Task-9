@@ -1,0 +1,620 @@
+/* =========================================================================
+   WORKMATE EXPENSE SUMMARY & SUBMIT EXPENSE - FIGMA 1:1 REPRODUCTION
+   ========================================================================= */
+
+.expense-screen-wrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  background: #F9F9FC;
+  position: relative;
+  box-sizing: border-box;
+  padding-bottom: 24px;
+}
+
+/* =========================================================================
+   1. PURPLE HEADER BANNER WITH CREDIT CARD & RAINBOW
+   ========================================================================= */
+.expense-purple-banner {
+  background: #7146FD;
+  padding: 20px 20px 52px;
+  color: #FFFFFF;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 0 0 28px 28px;
+}
+
+.expense-banner-title {
+  font-size: 19px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 4px;
+  letter-spacing: -0.2px;
+}
+
+.expense-banner-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* =========================================================================
+   2. FLOATING TOTAL EXPENSE CARD
+   ========================================================================= */
+.expense-summary-card {
+  background: #FFFFFF;
+  border-radius: 20px;
+  margin: -36px 16px 14px;
+  padding: 18px 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  border: 1px solid #EDEDF8;
+  position: relative;
+  z-index: 10;
+}
+
+.expense-summary-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #1A1D2E;
+  margin-bottom: 2px;
+}
+
+.expense-summary-sub {
+  font-size: 11px;
+  color: #8F95B2;
+  margin-bottom: 14px;
+}
+
+.expense-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.expense-stat-box {
+  background: #F9F9FC;
+  border: 1px solid #EDEDF8;
+  border-radius: 12px;
+  padding: 10px 10px;
+  text-align: left;
+}
+
+.expense-stat-label {
+  font-size: 11px;
+  color: #8F95B2;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.expense-stat-val {
+  font-size: 17px;
+  font-weight: 800;
+  color: #1A1D2E;
+  margin-top: 4px;
+}
+
+/* =========================================================================
+   3. FILTER TABS ROW
+   ========================================================================= */
+.expense-tabs-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  margin-bottom: 14px;
+}
+
+.expense-tab-btn {
+  background: #FFFFFF;
+  border: 1px solid #EDEDF8;
+  color: #8F95B2;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.expense-tab-btn.active {
+  background: #7146FD;
+  border-color: #7146FD;
+  color: #FFFFFF;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(113, 70, 253, 0.25);
+}
+
+/* =========================================================================
+   4. EXPENSE CARDS LIST
+   ========================================================================= */
+.expense-list-wrap {
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.expense-item-card {
+  background: #FFFFFF;
+  border-radius: 16px;
+  border: 1px solid #EDEDF8;
+  padding: 14px 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
+}
+
+.expense-item-date-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #1A1D2E;
+  margin-bottom: 12px;
+}
+
+.expense-item-data-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.expense-data-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.expense-data-col.right {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.expense-data-label {
+  font-size: 10.5px;
+  color: #8F95B2;
+  font-weight: 500;
+}
+
+.expense-data-val {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #1A1D2E;
+}
+
+/* Footer for Approved & Rejected cards */
+.expense-item-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #F0F1F8;
+  font-size: 11px;
+}
+
+.expense-status-approved {
+  color: #10B981;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.expense-status-rejected {
+  color: #FF5252;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.expense-approver-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #8F95B2;
+  font-size: 11px;
+}
+
+.expense-approver-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.expense-approver-name {
+  color: #1A1D2E;
+  font-weight: 600;
+}
+
+/* =========================================================================
+   5. SUBMIT EXPENSE SCREEN (Figma Frame ExpenseSummary/SubmitExpense)
+   ========================================================================= */
+.submit-expense-screen {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  background: #FFFFFF;
+  padding: 16px 20px 32px;
+  box-sizing: border-box;
+}
+
+.submit-expense-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.submit-expense-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #1A1D2E;
+  margin: 0;
+  text-align: center;
+}
+
+/* Motivation Banner */
+.submit-expense-banner {
+  background: #7146FD;
+  border-radius: 20px;
+  padding: 18px 16px 14px;
+  color: #FFFFFF;
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
+  box-shadow: 0 6px 18px rgba(113, 70, 253, 0.2);
+}
+
+.submit-expense-banner-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 4px;
+}
+
+.submit-expense-banner-sub {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0 0 14px;
+}
+
+.submit-polaroids-row {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.submit-polaroid-card {
+  background: #FFFFFF;
+  border-radius: 8px 8px 3px 3px;
+  padding: 4px 4px 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submit-polaroid-card.left {
+  transform: rotate(-6deg) translateY(4px);
+}
+
+.submit-polaroid-card.center {
+  transform: translateY(0);
+  z-index: 2;
+}
+
+.submit-polaroid-card.right {
+  transform: rotate(6deg) translateY(4px);
+}
+
+.submit-polaroid-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+/* Form Section */
+.submit-expense-section-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #1A1D2E;
+  margin-bottom: 2px;
+}
+
+.submit-expense-section-sub {
+  font-size: 11px;
+  color: #8F95B2;
+  margin-bottom: 14px;
+}
+
+/* Document Upload Box */
+.claim-upload-box {
+  border: 1.5px dashed #D5CCFD;
+  background: #FAF8FF;
+  border-radius: 16px;
+  padding: 22px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 18px;
+  position: relative;
+  transition: all 0.2s ease;
+  min-height: 120px;
+  box-sizing: border-box;
+}
+
+.claim-upload-box:hover {
+  background: #F3EFFF;
+}
+
+.claim-upload-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #7146FD;
+  margin: 8px 0 3px;
+}
+
+.claim-upload-hint {
+  font-size: 10px;
+  color: #8F95B2;
+}
+
+/* Uploading State */
+.claim-uploading-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.claim-upload-circle-progress {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 3px solid #EDE9FE;
+  border-top-color: #7146FD;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: #7146FD;
+  animation: spinSlow 1.2s linear infinite;
+}
+
+@keyframes spinSlow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.claim-uploading-text {
+  font-size: 11px;
+  color: #8F95B2;
+  font-weight: 600;
+}
+
+/* Receipt Preview State */
+.claim-receipt-preview {
+  width: 100%;
+  max-width: 220px;
+  background: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  border: 1px solid #EDEDF8;
+  padding: 14px 16px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.receipt-header-title {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #1A1D2E;
+}
+
+.receipt-header-sub {
+  font-size: 9.5px;
+  color: #8F95B2;
+  margin-bottom: 8px;
+}
+
+.receipt-dashed-line {
+  border-bottom: 1px dashed #D5CCFD;
+  margin: 6px 0;
+}
+
+.receipt-item-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #4A4E69;
+  margin-bottom: 3px;
+}
+
+.receipt-item-row.bold {
+  font-weight: 800;
+  color: #1A1D2E;
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.receipt-barcode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  height: 18px;
+  margin-top: 8px;
+}
+
+.barcode-line {
+  background: #1A1D2E;
+  height: 100%;
+}
+
+.claim-remove-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #FF5252;
+  color: #FFFFFF;
+  border: 1.5px solid #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(255, 82, 82, 0.4);
+}
+
+/* Form Dropdowns & Inputs */
+.claim-input-row {
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.claim-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #8F95B2;
+  margin-bottom: 5px;
+}
+
+.claim-field-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1.5px solid #EDEDF8;
+  border-radius: 14px;
+  height: 48px;
+  padding: 0 14px;
+  background: #FFFFFF;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.claim-field-box:hover {
+  border-color: #D5CCFD;
+}
+
+.claim-field-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1A1D2E;
+}
+
+.claim-field-left.placeholder {
+  color: #8F95B2;
+}
+
+.claim-text-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1A1D2E;
+  background: transparent;
+  padding: 0;
+}
+
+.claim-text-input::placeholder {
+  color: #8F95B2;
+  font-weight: 500;
+}
+
+.claim-textarea {
+  width: 100%;
+  border: 1.5px solid #EDEDF8;
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #1A1D2E;
+  background: #FFFFFF;
+  outline: none;
+  resize: none;
+  min-height: 72px;
+  box-sizing: border-box;
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.claim-textarea:focus {
+  border-color: #7146FD;
+  box-shadow: 0 0 0 3px rgba(113, 70, 253, 0.12);
+}
+
+.claim-textarea::placeholder {
+  color: #8F95B2;
+}
+
+/* Category Selection Radio Modal */
+.category-option-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1.5px solid #EDEDF8;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  background: #FFFFFF;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.category-option-item:hover {
+  border-color: #D5CCFD;
+}
+
+.category-option-item.selected {
+  border-color: #7146FD;
+  background: #FAF8FF;
+}
+
+.category-option-label {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1A1D2E;
+}
+
+.category-radio-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid #EDEDF8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.category-radio-circle.checked {
+  background: #7146FD;
+  border-color: #7146FD;
+}

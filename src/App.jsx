@@ -140,6 +140,52 @@ function MainApp() {
               />
             }
           />
+          <Route
+            path="/expense"
+            element={
+              <Home
+                isEmptyState={isEmptyState}
+                onToggleEmptyState={toggleEmptyState}
+                activeTab="expense"
+                onTabChange={setCurrentHomeTab}
+              />
+            }
+          />
+          <Route
+            path="/expenses"
+            element={
+              <Home
+                isEmptyState={isEmptyState}
+                onToggleEmptyState={toggleEmptyState}
+                activeTab="expense"
+                onTabChange={setCurrentHomeTab}
+              />
+            }
+          />
+          <Route
+            path="/expense/submit"
+            element={
+              <Home
+                isEmptyState={isEmptyState}
+                onToggleEmptyState={toggleEmptyState}
+                activeTab="expense"
+                initialExpenseSubScreen="submit-expense"
+                onTabChange={setCurrentHomeTab}
+              />
+            }
+          />
+          <Route
+            path="/submit-expense"
+            element={
+              <Home
+                isEmptyState={isEmptyState}
+                onToggleEmptyState={toggleEmptyState}
+                activeTab="expense"
+                initialExpenseSubScreen="submit-expense"
+                onTabChange={setCurrentHomeTab}
+              />
+            }
+          />
           <Route path="*" element={<Navigate to="/onboarding" replace />} />
         </Routes>
       </div>
