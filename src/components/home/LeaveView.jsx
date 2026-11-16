@@ -9,7 +9,8 @@ import {
   Briefcase,
   User,
   Layers,
-  Sparkles
+  Sparkles,
+  Star
 } from 'lucide-react';
 import '../../styles/leave.css';
 
@@ -69,6 +70,16 @@ function EmptySuitcaseGraphic() {
 }
 
 // Initial Mock Leave Data from Figma
+const INITIAL_REVIEW_LEAVES = [
+  {
+    id: 'rev-1',
+    date: '10 November 2024',
+    leaveDate: '11 Nov - 13 Nov',
+    totalLeave: '2 Days',
+    status: 'Review'
+  }
+];
+
 const INITIAL_APPROVED_LEAVES = [
   {
     id: 'app-1',
@@ -128,8 +139,8 @@ export default function LeaveView({
   // Active filter tab: 'review' | 'approved' | 'rejected'
   const [activeTab, setActiveTab] = useState('review');
 
-  // Leave data
-  const [reviewLeaves, setReviewLeaves] = useState([]);
+  // Leave data (matches Figma LeaveSummary/Review Frame with 1 active review leave)
+  const [reviewLeaves, setReviewLeaves] = useState(INITIAL_REVIEW_LEAVES);
   const [approvedLeaves] = useState(INITIAL_APPROVED_LEAVES);
   const [rejectedLeaves] = useState(INITIAL_REJECTED_LEAVES);
 
@@ -632,7 +643,7 @@ export default function LeaveView({
               reviewLeaves.map((leave) => (
                 <div key={leave.id} className="leave-item-card">
                   <div className="leave-item-date-row">
-                    <Sparkles size={14} color="#7146FD" />
+                    <Star size={15} color="#7146FD" strokeWidth={1.8} />
                     <span>{leave.date}</span>
                   </div>
 
@@ -725,7 +736,7 @@ export default function LeaveView({
       </div>
 
       {/* Bottom Submit Leave Button */}
-      <div style={{ padding: '0 16px', marginTop: 'auto' }}>
+      <div style={{ padding: '0 16px', marginTop: '14px', marginBottom: '16px' }}>
         <button
           type="button"
           className="signup-btn-primary"

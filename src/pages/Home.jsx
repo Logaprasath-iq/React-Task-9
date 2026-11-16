@@ -89,7 +89,7 @@ export default function Home({
       )}
 
       {/* Tab Views */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', width: '100%' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', width: '100%', minHeight: 0, overflowY: 'auto' }}>
         {activeTab === 'home' && (
           <HomeView
             isEmpty={isEmptyState}

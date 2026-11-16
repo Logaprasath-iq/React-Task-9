@@ -20,16 +20,30 @@ function MainApp() {
     setIsEmptyState(prev => !prev);
   };
 
-  const isDarkTop =
-    location.pathname === '/onboarding' ||
-    location.pathname === '/' ||
-    location.pathname.startsWith('/signin') ||
-    location.pathname.startsWith('/employee') ||
-    location.pathname === '/forgot-password' ||
-    location.pathname === '/signup/profile' ||
-    location.pathname === '/signup/badges' ||
-    location.pathname === '/profile';
-  const statusTheme = isDarkTop ? 'white' : 'dark';
+  const isPurpleTop = (() => {
+    // Sub-screens with white headers
+    if (
+      location.pathname.startsWith('/profile/') ||
+      location.pathname.includes('burnout-stats') ||
+      location.pathname.startsWith('/messages') ||
+      location.pathname === '/notifications' ||
+      location.pathname === '/submit-expense' ||
+      location.pathname === '/expense/submit' ||
+      location.pathname === '/submit-leave' ||
+      location.pathname === '/leave/submit'
+    ) {
+      return false;
+    }
+
+    if (location.pathname === '/home') {
+      return currentHomeTab !== 'home';
+    }
+
+    // Default routes with purple headers (onboarding, signin, signup, forgot-pass, profile, attendant, tasks, expense, leave)
+    return true;
+  })();
+
+  const statusTheme = isPurpleTop ? 'white' : 'dark';
 
   return (
     <div className="app-container">
@@ -38,13 +52,13 @@ function MainApp() {
         theme={statusTheme}
         time="08:15"
         style={
-          isDarkTop
+          isPurpleTop
             ? { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 100 }
             : { position: 'relative', background: '#FFFFFF', zIndex: 100 }
         }
       />
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', width: '100%', position: 'relative' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', width: '100%', position: 'relative', minHeight: 0, overflowY: 'auto' }}>
         <Routes>
           <Route path="/" element={<Navigate to="/onboarding" replace />} />
           <Route path="/onboarding" element={<Onboarding />} />
