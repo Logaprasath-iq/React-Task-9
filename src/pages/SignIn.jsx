@@ -9,11 +9,7 @@ import {
   Fingerprint,
   AlertCircle,
   Check,
-  ChevronDown,
-  ArrowUp,
-  Delete,
-  Smile,
-  Mic
+  ChevronDown
 } from 'lucide-react';
 import OnboardingIllustration from '../components/onboarding/OnboardingIllustration';
 import '../styles/auth.css';
@@ -45,72 +41,6 @@ function BiometricScanIcon({ size = 18, color = '#7146FD' }) {
   );
 }
 
-// iOS Virtual Keyboard matching Figma "Fill the data" Screen
-function VirtualIOSKeyboard({ onKeyPress, onReturn }) {
-  const row1 = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
-  const row2 = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
-  const row3 = ['Z', 'X', 'C', 'V', 'B', 'N', 'M'];
-
-  return (
-    <div className="ios-virtual-keyboard">
-      {/* Row 1 */}
-      <div className="keyboard-row">
-        {row1.map((k) => (
-          <button key={k} type="button" className="keyboard-key" onClick={() => onKeyPress(k)}>
-            {k}
-          </button>
-        ))}
-      </div>
-
-      {/* Row 2 */}
-      <div className="keyboard-row">
-        {row2.map((k) => (
-          <button key={k} type="button" className="keyboard-key" onClick={() => onKeyPress(k)}>
-            {k}
-          </button>
-        ))}
-      </div>
-
-      {/* Row 3 */}
-      <div className="keyboard-row">
-        <button type="button" className="keyboard-key special" aria-label="Shift">
-          <ArrowUp size={15} strokeWidth={2.4} />
-        </button>
-        {row3.map((k) => (
-          <button key={k} type="button" className="keyboard-key" onClick={() => onKeyPress(k)}>
-            {k}
-          </button>
-        ))}
-        <button type="button" className="keyboard-key special" onClick={() => onKeyPress('BACK')} aria-label="Backspace">
-          <Delete size={15} strokeWidth={2} />
-        </button>
-      </div>
-
-      {/* Row 4 */}
-      <div className="keyboard-row">
-        <button type="button" className="keyboard-key special" style={{ minWidth: '40px' }}>
-          123
-        </button>
-        <button type="button" className="keyboard-key space-key" onClick={() => onKeyPress(' ')}>
-          space
-        </button>
-        <button type="button" className="keyboard-key action-return" onClick={onReturn}>
-          return
-        </button>
-      </div>
-
-      {/* Bottom Controls */}
-      <div className="keyboard-bottom-controls">
-        <Smile size={19} />
-        <Mic size={19} />
-      </div>
-
-      {/* iOS Home Indicator Bar */}
-      <div className="keyboard-home-bar" />
-    </div>
-  );
-}
-
 export default function SignIn() {
   const navigate = useNavigate();
 
@@ -119,9 +49,6 @@ export default function SignIn() {
 
   // Error state: 'none' | 'email-not-registered' | 'wrong-password'
   const [errorState, setErrorState] = useState('none');
-
-  // Keyboard open state for "Fill the data" preview
-  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
   // Email form state (Pre-filled matching Figma "Hide Password" screen by default)
   const [email, setEmail] = useState('Tonald@work.com');
@@ -143,50 +70,18 @@ export default function SignIn() {
   const [employeePassword, setEmployeePassword] = useState('');
   const [showEmployeePassword, setShowEmployeePassword] = useState(false);
 
-  // Helper to switch between exact Figma flow screens shown in user screenshots
-  const applyFigmaState = (stateKey) => {
-    setActiveMethod('email');
-    if (stateKey === 'fill-data') {
-      setEmail('Tonald@Wo');
-      setPassword('');
-      setIsKeyboardOpen(true);
-      setErrorState('none');
-    } else if (stateKey === 'hide-password') {
-      setEmail('Tonald@work.com');
-      setPassword('password123');
-      setShowPassword(false);
-      setIsKeyboardOpen(false);
-      setErrorState('none');
-    } else if (stateKey === 'email-error') {
-      setEmail('Hello@work.com');
-      setPassword('password123');
-      setIsKeyboardOpen(false);
-      setErrorState('email-not-registered');
-    } else if (stateKey === 'pass-error') {
-      setEmail('Hello@work.com');
-      setPassword('password123');
-      setIsKeyboardOpen(false);
-      setErrorState('wrong-password');
-    }
-  };
-
-  // Virtual keyboard key press handler
-  const handleVirtualKeyPress = (char) => {
-    if (char === 'BACK') {
-      setEmail((prev) => prev.slice(0, -1));
-    } else {
-      setEmail((prev) => prev + char);
-    }
-  };
-
   // Handle Email Form Submit -> Figma "Sign In Success" -> Home
   const handleEmailSubmit = (e) => {
     e.preventDefault();
-    if (errorState === 'email-not-registered' || email.toLowerCase().includes('wrong') || email.toLowerCase().includes('notreg')) {
+    if (
+      email.toLowerCase() === 'hello@work.com' ||
+      email.toLowerCase().includes('notreg') ||
+      email.toLowerCase().includes('wrong')
+    ) {
       setErrorState('email-not-registered');
       return;
     }
-    if (errorState === 'wrong-password' || password === 'wrong') {
+    if (password === 'wrong') {
       setErrorState('wrong-password');
       return;
     }
@@ -237,7 +132,7 @@ export default function SignIn() {
           1. METHOD: EMAIL SIGN IN (Figma Row 1 & 2)
           =================================================================== */}
       {activeMethod === 'email' && (
-        <div className={`signin-bottom-sheet ${isKeyboardOpen ? 'keyboard-open' : ''}`}>
+        <div className="signin-bottom-sheet">
           <div className="signin-sheet-header">
             <h1 className="signin-sheet-title">Sign In</h1>
             <p className="signin-sheet-subtitle">Sign in to my account</p>
@@ -251,7 +146,7 @@ export default function SignIn() {
                 className={`signin-input-box ${
                   errorState === 'email-not-registered'
                     ? 'error'
-                    : isKeyboardOpen || email === 'Tonald@Wo'
+                    : email
                     ? 'focused'
                     : ''
                 }`}
@@ -348,95 +243,46 @@ export default function SignIn() {
             </button>
           </form>
 
-          {/* Virtual iOS Keyboard (Shown when in "Fill the data" state) */}
-          {isKeyboardOpen ? (
-            <VirtualIOSKeyboard
-              onKeyPress={handleVirtualKeyPress}
-              onReturn={() => {
-                setIsKeyboardOpen(false);
-                setPassword('password123');
-              }}
-            />
-          ) : (
-            <>
-              {/* OR Divider */}
-              <div className="signin-divider">
-                <span>OR</span>
-              </div>
+          {/* OR Divider */}
+          <div className="signin-divider">
+            <span>OR</span>
+          </div>
 
-              {/* Alternate Method 1: Sign in with Employee ID */}
-              <button
-                type="button"
-                className="signin-alt-btn"
-                onClick={() => {
-                  setActiveMethod('employee');
-                  setErrorState('none');
-                }}
-              >
-                <User size={16} color="#7146FD" />
-                <span>Sign in With Employee ID</span>
-              </button>
+          {/* Alternate Method 1: Sign in with Employee ID */}
+          <button
+            type="button"
+            className="signin-alt-btn"
+            onClick={() => {
+              setActiveMethod('employee');
+              setErrorState('none');
+            }}
+          >
+            <User size={16} color="#7146FD" />
+            <span>Sign in With Employee ID</span>
+          </button>
 
-              {/* Alternate Method 2: Sign in with Phone */}
-              <button
-                type="button"
-                className="signin-alt-btn"
-                onClick={() => {
-                  setActiveMethod('phone');
-                  setErrorState('none');
-                }}
-              >
-                <Phone size={16} color="#7146FD" />
-                <span>Sign in With Phone</span>
-              </button>
+          {/* Alternate Method 2: Sign in with Phone */}
+          <button
+            type="button"
+            className="signin-alt-btn"
+            onClick={() => {
+              setActiveMethod('phone');
+              setErrorState('none');
+            }}
+          >
+            <Phone size={16} color="#7146FD" />
+            <span>Sign in With Phone</span>
+          </button>
 
-              {/* Footer Link */}
-              <div className="signin-footer">
-                <span>Don't have an account?</span>
-                <button
-                  type="button"
-                  className="signin-footer-link"
-                  onClick={() => navigate('/signup')}
-                >
-                  Sign Up Here
-                </button>
-              </div>
-            </>
-          )}
-
-          {/* Discreet Figma Flow Navigator Pills (Directly matching Figma frames) */}
-          <div className="figma-flow-switcher">
+          {/* Footer Link */}
+          <div className="signin-footer">
+            <span>Don't have an account?</span>
             <button
               type="button"
-              className={`figma-flow-pill ${isKeyboardOpen ? 'active' : ''}`}
-              onClick={() => applyFigmaState('fill-data')}
-              title="Show typing state with iOS keyboard"
+              className="signin-footer-link"
+              onClick={() => navigate('/signup')}
             >
-              Fill the data
-            </button>
-            <button
-              type="button"
-              className={`figma-flow-pill ${!isKeyboardOpen && errorState === 'none' ? 'active' : ''}`}
-              onClick={() => applyFigmaState('hide-password')}
-              title="Normal filled state with hidden password"
-            >
-              Hide Password
-            </button>
-            <button
-              type="button"
-              className={`figma-flow-pill ${errorState === 'email-not-registered' ? 'active' : ''}`}
-              onClick={() => applyFigmaState('email-error')}
-              title="Email Not Registered Error"
-            >
-              Email Not Registered
-            </button>
-            <button
-              type="button"
-              className={`figma-flow-pill ${errorState === 'wrong-password' ? 'active' : ''}`}
-              onClick={() => applyFigmaState('pass-error')}
-              title="Wrong Password Error"
-            >
-              Wrong Password
+              Sign Up Here
             </button>
           </div>
         </div>
