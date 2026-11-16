@@ -26,13 +26,19 @@ export default function Home({
   // 'main' | 'clockin-map' | 'camera' | 'selfie-review' | 'details'
   const [clockInSubScreen, setClockInSubScreen] = useState('main');
 
+  // Sub-screen state inside the Task Management flow:
+  // 'main' | 'create-task' | 'details' | 'zoom'
+  const [taskSubScreen, setTaskSubScreen] = useState('main');
+
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
   const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
   // Bottom navigation should only be shown on main tabs, and hidden during sub-flows like map, camera, review, or details
-  const isBottomNavVisible = !(activeTab === 'clockin' && clockInSubScreen !== 'main');
+  const isBottomNavVisible =
+    !(activeTab === 'clockin' && clockInSubScreen !== 'main') &&
+    !(activeTab === 'tasks' && taskSubScreen !== 'main');
 
   return (
     <div
@@ -74,7 +80,8 @@ export default function Home({
         {activeTab === 'tasks' && (
           <TaskView
             isEmpty={isEmptyState}
-            onOpenCreateTask={() => setIsTaskModalOpen(true)}
+            subScreen={taskSubScreen}
+            onSubScreenChange={setTaskSubScreen}
           />
         )}
 
@@ -100,6 +107,7 @@ export default function Home({
           onTabChange={(tab) => {
             setActiveTab(tab);
             if (tab === 'clockin') setClockInSubScreen('main');
+            if (tab === 'tasks') setTaskSubScreen('main');
           }}
         />
       )}
