@@ -58,7 +58,17 @@ function MainApp() {
         }
       />
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', width: '100%', position: 'relative', minHeight: 0, overflowY: 'auto' }}>
+      <div
+        style={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
+          position: 'relative',
+          minHeight: 0,
+          overflowY: location.pathname === '/onboarding' || location.pathname === '/' ? 'hidden' : 'auto'
+        }}
+      >
         <Routes>
           <Route path="/" element={<Navigate to="/onboarding" replace />} />
           <Route path="/onboarding" element={<Onboarding />} />

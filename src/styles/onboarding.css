@@ -2,24 +2,29 @@
 .onboarding-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100%;
+  min-height: 100%;
+  max-height: 100%;
   width: 100%;
   background: linear-gradient(180deg, #6C42FD 0%, #8258FE 28%, #A483FE 50%, #FAF8FF 72%, #FFFFFF 90%);
   position: relative;
-  overflow-x: hidden;
+  overflow: hidden;
   justify-content: space-between;
+  box-sizing: border-box;
 }
 
 /* Upper Section with 3D Floating Isometric Cards */
 .onboarding-upper {
-  flex: 1.25;
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 48px 16px 10px;
+  padding: 44px 16px 6px;
   position: relative;
   width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* 3D Isometric Cards Scene */
@@ -27,7 +32,7 @@
   position: relative;
   width: 100%;
   max-width: 340px;
-  height: 315px;
+  height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -232,13 +237,15 @@
 /* Lower Section - Pure White Content Area */
 .onboarding-lower {
   background: #FFFFFF;
-  padding: 28px 24px 34px;
+  padding: 20px 24px 28px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   width: 100%;
   z-index: 10;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .onboarding-text-content {
@@ -247,22 +254,22 @@
   align-items: center;
   text-align: center;
   width: 100%;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .onboarding-title {
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 800;
   color: #16192C;
   line-height: 1.25;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   letter-spacing: -0.4px;
 }
 
 .onboarding-description {
-  font-size: 14.5px;
+  font-size: 13.5px;
   color: #7E8299;
-  line-height: 1.55;
+  line-height: 1.5;
   max-width: 320px;
   margin: 0 auto;
 }
@@ -273,7 +280,7 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  margin: 18px 0 24px;
+  margin: 14px 0 16px;
 }
 
 .indicator-bar {
@@ -299,17 +306,17 @@
 .onboarding-actions {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
 }
 
 .btn-pill-primary {
   width: 100%;
-  height: 52px;
+  height: 50px;
   border-radius: 9999px;
   background: linear-gradient(135deg, #7952FC 0%, #5833EA 100%);
   color: #FFFFFF;
-  font-size: 16px;
+  font-size: 15.5px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -324,12 +331,12 @@
 
 .btn-pill-skip {
   width: 100%;
-  height: 52px;
+  height: 50px;
   border-radius: 9999px;
   background: #FFFFFF;
   border: 1.5px solid #D5CCFD;
   color: #7146FD;
-  font-size: 16px;
+  font-size: 15.5px;
   font-weight: 700;
   display: flex;
   align-items: center;
