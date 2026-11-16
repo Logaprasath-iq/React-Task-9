@@ -1,8 +1,7 @@
-import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Mail,
-  Lock,
   Eye,
   EyeOff,
   User,
@@ -23,37 +22,141 @@ import {
 import { currentUser } from '../data/mockData';
 import '../styles/signup.css';
 
+// Exact Figma Biometric Scanner Icon (Corner scanning brackets with biometric lines)
+function BiometricScanIcon({ size = 18, color = '#7146FD' }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={{ flexShrink: 0 }}
+    >
+      <path d="M4 8V5a1 1 0 0 1 1-1h3" />
+      <path d="M16 4h3a1 1 0 0 1 1 1v3" />
+      <path d="M20 16v3a1 1 0 0 1-1 1h-3" />
+      <path d="M8 20H5a1 1 0 0 1-1-1v-3" />
+      <path d="M12 8a3.5 3.5 0 0 0-3 3.5c0 1.8 1.2 3.2 2.5 4" />
+      <path d="M15 11.5a3 3 0 0 0-3-3" />
+      <path d="M12 11.5v3" />
+    </svg>
+  );
+}
+
+// Exact Figma Company ID Card Icon
+function CompanyIdIcon({ size = 18, color = '#7146FD' }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={{ flexShrink: 0 }}
+    >
+      <rect x="3" y="5" width="18" height="14" rx="3" />
+      <circle cx="8.5" cy="12" r="2" />
+      <line x1="13" y1="11" x2="18" y2="11" />
+      <line x1="13" y1="14" x2="16" y2="14" />
+    </svg>
+  );
+}
+
+// Exact Figma 3D Hexagonal Achievement Badge
+function HexagonBadge({ color, icon, name }) {
+  return (
+    <div className="achievement-badge-col">
+      <div className="achievement-badge-hex-wrap" style={{ filter: `drop-shadow(0 4px 10px ${color}45)` }}>
+        <svg width="44" height="48" viewBox="0 0 44 48" fill="none">
+          {/* Main Hexagon Body */}
+          <polygon
+            points="22,2 42,13.5 42,36.5 22,46 2,36.5 2,13.5"
+            fill={color}
+          />
+          {/* Top/Inner Highlight Facet */}
+          <polygon
+            points="22,5 39,14.5 39,34 22,43 5,34 5,14.5"
+            fill="#FFFFFF"
+            opacity="0.22"
+          />
+          {/* Specular Glint Top Corner */}
+          <polygon
+            points="22,5 30,9.5 22,14 14,9.5"
+            fill="#FFFFFF"
+            opacity="0.35"
+          />
+        </svg>
+        <span className="achievement-badge-center-icon">{icon}</span>
+      </div>
+      <span className="achievement-badge-caption">{name}</span>
+    </div>
+  );
+}
+
 export default function SignUp() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Helper to determine initial view from route
+  const getViewFromPath = () => {
+    const p = location.pathname.toLowerCase();
+    if (p.includes('work-profile')) return 'work-profile';
+    if (p.includes('badges')) return 'profile-badges';
+    if (p.includes('profile')) return 'complete-profile';
+    if (p.includes('tnc')) return 'tnc';
+    return 'form';
+  };
 
   // Active view: 'form' | 'tnc' | 'complete-profile' | 'work-profile' | 'profile-badges'
-  const [currentView, setCurrentView] = useState('form');
+  const [currentView, setCurrentView] = useState(getViewFromPath);
+
+  // Sync route if location changes
+  useEffect(() => {
+    setCurrentView(getViewFromPath());
+  }, [location.pathname]);
 
   // Active modal: null | 'email-verification' | 'welcome' | 'confirm-update' | 'update-success'
   const [activeModal, setActiveModal] = useState(null);
 
-  // Form inputs (initialized with clean or filled values matching Figma)
-  const [email, setEmail] = useState('');
+  // Form inputs (Pre-filled matching Figma SignUp/Filled frame)
+  const [email, setEmail] = useState('Tonald@work.com');
   const [phoneCode, setPhoneCode] = useState('INA');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [companyId, setCompanyId] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('+62 82150005000');
+  const [companyId, setCompanyId] = useState('1015015');
+  const [password, setPassword] = useState('password123');
+  const [confirmPassword, setConfirmPassword] = useState('password123');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
 
-  // Email OTP inputs (6 boxes)
+  // Email OTP inputs (6 boxes pre-filled with '0' as in Figma SignUp/EmailVerification/Filled)
   const [otpDigits, setOtpDigits] = useState(['0', '0', '0', '0', '0', '0']);
   const otpInputRefs = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)];
 
-  // Work Profile Form State
+  // Work Profile Form State (Pre-filled matching Figma SignUp/WorkProfileFilled)
   const [firstName, setFirstName] = useState('Tonald');
   const [lastName, setLastName] = useState('Drump');
   const [dob, setDob] = useState('10 December 1997');
   const [position, setPosition] = useState('Junior Full Stack Developer');
-  const [address, setAddress] = useState('Jl. Sudirman No. 45, Jakarta');
+  const [address, setAddress] = useState('Your current domicile');
+
+  // Navigate to internal views
+  const switchView = (viewName) => {
+    setCurrentView(viewName);
+    if (viewName === 'form') navigate('/signup');
+    else if (viewName === 'tnc') navigate('/signup/tnc');
+    else if (viewName === 'complete-profile') navigate('/signup/profile');
+    else if (viewName === 'work-profile') navigate('/signup/work-profile');
+    else if (viewName === 'profile-badges') navigate('/signup/badges');
+  };
 
   // Form Submit -> Opens Email Verification Modal
   const handleSignUpSubmit = (e) => {
@@ -86,7 +189,7 @@ export default function SignUp() {
   // Welcome modal handlers
   const handleSetUpProfile = () => {
     setActiveModal(null);
-    setCurrentView('complete-profile');
+    switchView('complete-profile');
   };
 
   const handleExploreAppFirst = () => {
@@ -97,7 +200,7 @@ export default function SignUp() {
   return (
     <div className="figma-signup-container">
       {/* ===================================================================
-          1. MAIN SIGN UP REGISTRATION FORM (Figma Frame SignUp)
+          1. MAIN SIGN UP REGISTRATION FORM (Figma Frame SignUp / SignUp/Filled / Complete)
           =================================================================== */}
       {currentView === 'form' && (
         <div className="signup-main-content">
@@ -120,7 +223,7 @@ export default function SignUp() {
               <label className="signup-label">Email</label>
               <div className="signup-input-field">
                 <div className="signup-field-icon">
-                  <Mail size={16} />
+                  <Mail size={18} color="#7146FD" strokeWidth={2} />
                 </div>
                 <input
                   type="email"
@@ -148,7 +251,7 @@ export default function SignUp() {
                 <input
                   type="text"
                   className="signup-input-element"
-                  placeholder="+62 8200 0000 0000"
+                  placeholder="+62 82150005000"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   required
@@ -156,17 +259,7 @@ export default function SignUp() {
               </div>
 
               {showCountryDropdown && (
-                <div
-                  style={{
-                    background: '#FFFFFF',
-                    border: '1px solid #EDEDF8',
-                    borderRadius: '12px',
-                    padding: '6px',
-                    marginTop: '4px',
-                    boxShadow: '0 8px 20px rgba(0,0,0,0.08)',
-                    zIndex: 20
-                  }}
-                >
+                <div className="signup-country-dropdown-menu">
                   {[
                     { code: 'INA', prefix: '+62', name: 'Indonesia' },
                     { code: 'USA', prefix: '+1', name: 'United States' },
@@ -180,16 +273,7 @@ export default function SignUp() {
                         setPhoneNumber(`${c.prefix} `);
                         setShowCountryDropdown(false);
                       }}
-                      style={{
-                        padding: '6px 10px',
-                        fontSize: '12px',
-                        fontWeight: '600',
-                        color: '#1A1D2E',
-                        cursor: 'pointer',
-                        borderRadius: '6px',
-                        display: 'flex',
-                        justifyContent: 'space-between'
-                      }}
+                      className="signup-country-dropdown-item"
                     >
                       <span>{c.name} ({c.code})</span>
                       <span style={{ color: '#7146FD' }}>{c.prefix}</span>
@@ -204,12 +288,12 @@ export default function SignUp() {
               <label className="signup-label">Company ID</label>
               <div className="signup-input-field">
                 <div className="signup-field-icon">
-                  <User size={16} />
+                  <CompanyIdIcon size={18} color="#7146FD" />
                 </div>
                 <input
                   type="text"
                   className="signup-input-element"
-                  placeholder="Enter Company ID"
+                  placeholder="1015015"
                   value={companyId}
                   onChange={(e) => setCompanyId(e.target.value)}
                   required
@@ -217,12 +301,12 @@ export default function SignUp() {
               </div>
             </div>
 
-            {/* Field 4: Password */}
+            {/* Field 4: Password with Biometric Scan Icon */}
             <div className="signup-input-row">
               <label className="signup-label">Password</label>
               <div className="signup-input-field">
                 <div className="signup-field-icon">
-                  <Lock size={16} />
+                  <BiometricScanIcon size={18} color="#7146FD" />
                 </div>
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -237,17 +321,17 @@ export default function SignUp() {
                   className="signin-icon-btn"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showPassword ? <EyeOff size={18} color="#7146FD" /> : <Eye size={18} color="#7146FD" />}
                 </button>
               </div>
             </div>
 
-            {/* Field 5: Confirm Password */}
+            {/* Field 5: Confirm Password with Biometric Scan Icon */}
             <div className="signup-input-row">
               <label className="signup-label">Confirm Password</label>
               <div className="signup-input-field">
                 <div className="signup-field-icon">
-                  <Lock size={16} />
+                  <BiometricScanIcon size={18} color="#7146FD" />
                 </div>
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
@@ -262,7 +346,7 @@ export default function SignUp() {
                   className="signin-icon-btn"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
-                  {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showConfirmPassword ? <EyeOff size={18} color="#7146FD" /> : <Eye size={18} color="#7146FD" />}
                 </button>
               </div>
             </div>
@@ -275,12 +359,12 @@ export default function SignUp() {
               >
                 {agreedToTerms && <Check size={12} color="#FFFFFF" strokeWidth={3} />}
               </div>
-              <div>
+              <div className="signup-agreement-label">
                 <span>I agree with </span>
                 <button
                   type="button"
                   className="signup-terms-link"
-                  onClick={() => setCurrentView('tnc')}
+                  onClick={() => switchView('tnc')}
                 >
                   terms &amp; conditions and privacy policy
                 </button>
@@ -301,7 +385,7 @@ export default function SignUp() {
               className="signup-footer-link"
               onClick={() => navigate('/signin')}
             >
-              Sign In Here
+              Sign in here
             </button>
           </div>
         </div>
@@ -317,19 +401,19 @@ export default function SignUp() {
           <div className="tnc-scroll-card">
             <div className="tnc-heading">Terms and Conditions:</div>
             <p>
-              <strong>Acceptance:</strong> By using the Workmate app, you agree to comply with all applicable terms and conditions.
+              <strong>Acceptance:</strong> By using the Re-Dus app, you agree to comply with all applicable terms and conditions.
             </p>
             <p>
               <strong>Usage:</strong> This app is for personal use only and may not be used for commercial purposes without permission.
             </p>
             <p>
-              <strong>Account:</strong> You are responsible for the security of your account and all activities that occur under it.
+              <strong>Account:</strong> You are responsible for the security of your account and all activities that occur within it.
             </p>
             <p>
               <strong>Content:</strong> You must not upload content that violates copyright, privacy, or applicable laws.
             </p>
             <p>
-              <strong>Changes:</strong> We reserve the right to change the terms and conditions at any time and will notify you of these changes through the app or email.
+              <strong>Changes:</strong> We reserve the right to change the terms and conditions at any time and will notify you of these changes through the app or via email.
             </p>
 
             <div className="tnc-heading">Privacy Policy:</div>
@@ -337,13 +421,13 @@ export default function SignUp() {
               <strong>Data Collection:</strong> We collect personal data such as name, email, and location to process transactions and improve our services.
             </p>
             <p>
-              <strong>Data Usage:</strong> Your data is used for internal purposes such as account management, usage analytics, and service offerings.
+              <strong>Data Usage:</strong> Your data is used for internal purposes such as account management, usage analysis, and service offerings.
             </p>
             <p>
               <strong>Security:</strong> We protect your data with appropriate security measures to prevent unauthorized access.
             </p>
             <p>
-              <strong>Data Sharing:</strong> We do not share your personal data with third parties without your consent except as required by law.
+              <strong>Data Sharing:</strong> We do not share your personal data with third parties without your consent, except as required by law.
             </p>
             <p>
               <strong>Your Rights:</strong> You can access, update, or delete your personal data.
@@ -355,7 +439,7 @@ export default function SignUp() {
             className="signup-btn-primary"
             onClick={() => {
               setAgreedToTerms(true);
-              setCurrentView('form');
+              switchView('form');
             }}
           >
             I Agree
@@ -364,9 +448,7 @@ export default function SignUp() {
           <button
             type="button"
             className="signup-btn-secondary"
-            onClick={() => {
-              setCurrentView('form');
-            }}
+            onClick={() => switchView('form')}
           >
             Decline
           </button>
@@ -383,7 +465,7 @@ export default function SignUp() {
             <button
               type="button"
               className="profile-back-btn"
-              onClick={() => setCurrentView('form')}
+              onClick={() => switchView('form')}
             >
               <ArrowLeft size={18} />
             </button>
@@ -401,15 +483,23 @@ export default function SignUp() {
               />
             ) : (
               <div className="profile-avatar-placeholder">
-                <span role="img" aria-label="profile">👧</span>
+                <svg width="48" height="48" viewBox="0 0 44 44" fill="none">
+                  <rect width="44" height="44" rx="14" fill="#EDE9FE" />
+                  <circle cx="15" cy="18" r="2.5" fill="#7146FD" />
+                  <circle cx="29" cy="18" r="2.5" fill="#7146FD" />
+                  <path d="M16 26C18 29.5 26 29.5 28 26" stroke="#7146FD" strokeWidth="2.5" strokeLinecap="round" />
+                  <circle cx="11" cy="24" r="2" fill="#F472B6" opacity="0.6" />
+                  <circle cx="33" cy="24" r="2" fill="#F472B6" opacity="0.6" />
+                </svg>
               </div>
             )}
 
             <div className="profile-name-row">
               <span className="profile-user-name">Tonald Drump</span>
-              <div style={{ width: '15px', height: '15px', borderRadius: '50%', background: '#3B82F6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Check size={9} strokeWidth={3} color="#FFFFFF" />
-              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#3B82F6" style={{ flexShrink: 0 }}>
+                <circle cx="12" cy="12" r="10" fill="#3B82F6" />
+                <path d="M8.5 12.5L11 15L16 9.5" stroke="#FFFFFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </div>
 
             <span className="profile-role-text">
@@ -419,82 +509,61 @@ export default function SignUp() {
             {/* Achievements Section when badges unlocked */}
             {currentView === 'profile-badges' && (
               <div className="profile-achievements-box">
-                <span className="profile-achievements-title">Achievements</span>
+                <div className="profile-achievements-header">
+                  <span className="profile-achievements-title">Achievement</span>
+                  <span className="profile-achievements-sub">Your achievement so far</span>
+                </div>
                 <div className="profile-badges-row">
-                  {[
-                    { name: 'Probation Slayer', color: '#10B981', icon: '💎' },
-                    { name: 'Junior Of The Month', color: '#6366F1', icon: '⭐' },
-                    { name: 'Employee Of The Year', color: '#F59E0B', icon: '✨' },
-                    { name: 'Top Performer', color: '#EC4899', icon: '👑' }
-                  ].map((b, i) => (
-                    <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', width: '56px' }}>
-                      <div
-                        style={{
-                          width: '32px',
-                          height: '32px',
-                          borderRadius: '8px',
-                          background: `${b.color}18`,
-                          border: `1.5px solid ${b.color}`,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          fontSize: '13px',
-                          transform: 'rotate(45deg)',
-                          marginBottom: '6px'
-                        }}
-                      >
-                        <span style={{ transform: 'rotate(-45deg)' }}>{b.icon}</span>
-                      </div>
-                      <span style={{ fontSize: '7.5px', fontWeight: '700', color: '#4A4E69', lineHeight: '1.2' }}>
-                        {b.name}
-                      </span>
-                    </div>
-                  ))}
+                  <HexagonBadge color="#10B981" icon="💎" name="Probation Slayer" />
+                  <HexagonBadge color="#6366F1" icon="⭐" name="Rising Junior" />
+                  <HexagonBadge color="#F59E0B" icon="✨" name="Employee Of The Month" />
+                  <HexagonBadge color="#EC4899" icon="💎" name="Top Performer" />
+                  <HexagonBadge color="#EF4444" icon="👑" name="Leader Of The Year" />
                 </div>
               </div>
             )}
           </div>
 
           {/* Account Section */}
-          <div className="profile-section-title">Account</div>
+          <div className="profile-section-title">ACCOUNT</div>
           <div className="profile-menu-card">
             <div
               className="profile-menu-item"
-              onClick={() => setCurrentView('work-profile')}
+              onClick={() => switchView('work-profile')}
             >
               <div className="profile-menu-left">
                 <div className="profile-menu-icon">
-                  <User size={15} />
+                  <User size={16} />
                 </div>
                 <span className="profile-menu-label">My Work Profile</span>
               </div>
               <ChevronRight size={16} color="#A0A5BD" />
             </div>
 
-            <div className="profile-menu-item" onClick={() => alert('Office Assets clicked')}>
+            <div className="profile-menu-item" onClick={() => alert('Office Assets: 1x MacBook Pro M3, 1x 4K Monitor, 1x Magic Trackpad')}>
               <div className="profile-menu-left">
                 <div className="profile-menu-icon">
-                  <Briefcase size={15} />
+                  <Briefcase size={16} />
                 </div>
                 <span className="profile-menu-label">Office Assets</span>
               </div>
               <ChevronRight size={16} color="#A0A5BD" />
             </div>
 
-            <div className="profile-menu-item" onClick={() => alert('Payroll & Tax clicked')}>
+            <div className="profile-menu-item" onClick={() => alert('Payroll & Tax: Next salary payout on 28th Nov.')}>
               <div className="profile-menu-left">
                 <div className="profile-menu-icon">
-                  <Receipt size={15} />
+                  <Receipt size={16} />
                 </div>
                 <span className="profile-menu-label">Payroll &amp; Tax</span>
               </div>
               <ChevronRight size={16} color="#A0A5BD" />
             </div>
 
-            <div className="profile-menu-item" onClick={() => alert('Roles clicked')}>
+            <div className="profile-menu-item" onClick={() => alert('Role: Full-Stack Developer (Engineering Squad)')}>
               <div className="profile-menu-left">
                 <div className="profile-menu-icon">
-                  <Shield size={15} />
+                  <Shield size={16} />
                 </div>
                 <span className="profile-menu-label">Roles</span>
               </div>
@@ -503,32 +572,32 @@ export default function SignUp() {
           </div>
 
           {/* Settings Section */}
-          <div className="profile-section-title">Settings</div>
+          <div className="profile-section-title">SETTINGS</div>
           <div className="profile-menu-card">
             <div className="profile-menu-item" onClick={() => navigate('/forgot-password')}>
               <div className="profile-menu-left">
                 <div className="profile-menu-icon">
-                  <Key size={15} />
+                  <Key size={16} />
                 </div>
                 <span className="profile-menu-label">Change Password</span>
               </div>
               <ChevronRight size={16} color="#A0A5BD" />
             </div>
 
-            <div className="profile-menu-item" onClick={() => alert('Version: Workmate Mobile v2.4')}>
+            <div className="profile-menu-item" onClick={() => alert('Work Mate v2.4.0 (Build 2026)')}>
               <div className="profile-menu-left">
                 <div className="profile-menu-icon">
-                  <Info size={15} />
+                  <Info size={16} />
                 </div>
                 <span className="profile-menu-label">Versioning</span>
               </div>
               <ChevronRight size={16} color="#A0A5BD" />
             </div>
 
-            <div className="profile-menu-item" onClick={() => alert('FAQ and Help Center')}>
+            <div className="profile-menu-item" onClick={() => alert('Work Mate Help Desk: support@workmate.internal')}>
               <div className="profile-menu-left">
                 <div className="profile-menu-icon">
-                  <HelpCircle size={15} />
+                  <HelpCircle size={16} />
                 </div>
                 <span className="profile-menu-label">FAQ and Help</span>
               </div>
@@ -538,7 +607,7 @@ export default function SignUp() {
             <div className="profile-menu-item" onClick={() => navigate('/signin')}>
               <div className="profile-menu-left">
                 <div className="profile-menu-icon" style={{ background: '#FFF1F2', color: '#F43F5E' }}>
-                  <LogOut size={15} />
+                  <LogOut size={16} />
                 </div>
                 <span className="profile-menu-label" style={{ color: '#F43F5E' }}>Logout</span>
               </div>
@@ -557,21 +626,21 @@ export default function SignUp() {
             <button
               type="button"
               className="signin-icon-btn"
-              onClick={() => setCurrentView('complete-profile')}
+              onClick={() => switchView('complete-profile')}
             >
               <ArrowLeft size={18} />
             </button>
-            <h2 style={{ fontSize: '16px', fontWeight: '800', color: '#1A1D2E', margin: 0 }}>
+            <h2 className="work-profile-header-title">
               My Work Profile
             </h2>
             <div style={{ width: '20px' }} />
           </div>
 
           <div className="work-profile-body">
-            <h3 style={{ fontSize: '13.5px', fontWeight: '800', color: '#1A1D2E', marginBottom: '2px' }}>
+            <h3 className="work-profile-section-heading">
               Personal Data Information
             </h3>
-            <p style={{ fontSize: '11px', color: '#8F95B2', marginBottom: '16px' }}>
+            <p className="work-profile-section-sub">
               Your personal data information
             </p>
 
@@ -584,7 +653,7 @@ export default function SignUp() {
                   className="photo-upload-img"
                 />
                 <div className="photo-upload-badge">
-                  <Camera size={11} />
+                  <Camera size={11} color="#FFFFFF" />
                 </div>
               </div>
               <span className="photo-upload-title">Upload Photo</span>
@@ -598,7 +667,7 @@ export default function SignUp() {
               <label className="signup-label">First Name</label>
               <div className="signup-input-field">
                 <div className="signup-field-icon">
-                  <User size={16} />
+                  <User size={18} color="#7146FD" />
                 </div>
                 <input
                   type="text"
@@ -614,7 +683,7 @@ export default function SignUp() {
               <label className="signup-label">Last Name</label>
               <div className="signup-input-field">
                 <div className="signup-field-icon">
-                  <User size={16} />
+                  <User size={18} color="#7146FD" />
                 </div>
                 <input
                   type="text"
@@ -630,7 +699,7 @@ export default function SignUp() {
               <label className="signup-label">Date of Birth</label>
               <div className="signup-input-field">
                 <div className="signup-field-icon">
-                  <Calendar size={16} />
+                  <Calendar size={18} color="#7146FD" />
                 </div>
                 <input
                   type="text"
@@ -647,7 +716,7 @@ export default function SignUp() {
               <label className="signup-label">Position</label>
               <div className="signup-input-field">
                 <div className="signup-field-icon">
-                  <Briefcase size={16} />
+                  <Briefcase size={18} color="#7146FD" />
                 </div>
                 <input
                   type="text"
@@ -692,14 +761,17 @@ export default function SignUp() {
         <div className="signup-modal-backdrop">
           <div className="signup-bottom-modal">
             <div className="signup-floating-badge">
-              <Mail size={26} strokeWidth={2.4} />
+              <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Mail size={26} strokeWidth={2.4} color="#FFFFFF" />
+                <span className="email-badge-dot" />
+              </div>
             </div>
 
             <h2 className="signup-modal-title">Email Verification Sent!</h2>
 
             <p className="signup-modal-desc">
               A verification code will be sent to the email{' '}
-              <strong style={{ color: '#1A1D2E' }}>Hello@work.com</strong> for your account verification process.
+              <strong style={{ color: '#1A1D2E' }}>{email || 'Hello@work.com'}</strong> for your account verification process.
             </p>
 
             {/* 6 OTP Boxes */}
@@ -720,7 +792,7 @@ export default function SignUp() {
             </div>
 
             <div className="phone-otp-resend-prompt">
-              Haven't received the verification code?
+              Haven't received the verification code?{' '}
               <button
                 type="button"
                 className="phone-otp-resend-btn"
@@ -748,7 +820,7 @@ export default function SignUp() {
         <div className="signup-modal-backdrop">
           <div className="signup-bottom-modal">
             <div className="signup-floating-badge">
-              <Shield size={26} strokeWidth={2.4} />
+              <User size={26} strokeWidth={2.4} color="#FFFFFF" />
             </div>
 
             <h2 className="signup-modal-title">Welcome To Work Mate!</h2>
@@ -783,7 +855,7 @@ export default function SignUp() {
         <div className="signup-modal-backdrop">
           <div className="signup-bottom-modal">
             <div className="signup-floating-badge">
-              <User size={26} strokeWidth={2.4} />
+              <User size={26} strokeWidth={2.4} color="#FFFFFF" />
             </div>
 
             <h2 className="signup-modal-title">Update Profile</h2>
@@ -818,7 +890,7 @@ export default function SignUp() {
         <div className="signup-modal-backdrop">
           <div className="signup-bottom-modal">
             <div className="signup-floating-badge">
-              <User size={26} strokeWidth={2.4} />
+              <User size={26} strokeWidth={2.4} color="#FFFFFF" />
             </div>
 
             <h2 className="signup-modal-title">Profile Updated!</h2>
@@ -832,7 +904,7 @@ export default function SignUp() {
               className="signup-btn-primary"
               onClick={() => {
                 setActiveModal(null);
-                setCurrentView('profile-badges');
+                switchView('profile-badges');
               }}
             >
               Visit My Profile

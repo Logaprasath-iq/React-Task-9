@@ -22,7 +22,9 @@ function MainApp() {
     location.pathname === '/' ||
     location.pathname.startsWith('/signin') ||
     location.pathname.startsWith('/employee') ||
-    location.pathname === '/forgot-password';
+    location.pathname === '/forgot-password' ||
+    location.pathname === '/signup/profile' ||
+    location.pathname === '/signup/badges';
   const statusTheme = isDarkTop ? 'white' : 'dark';
 
   return (
@@ -50,7 +52,14 @@ function MainApp() {
           <Route path="/signin/phone" element={<SignIn initialMethod="phone" />} />
           <Route path="/signin/phone-otp" element={<SignIn initialMethod="phone-otp" />} />
           <Route path="/employee-id" element={<Navigate to="/signin/employee-id" replace />} />
+
+          {/* Sign Up Flow Routes */}
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/signup/tnc" element={<SignUp />} />
+          <Route path="/signup/profile" element={<SignUp />} />
+          <Route path="/signup/work-profile" element={<SignUp />} />
+          <Route path="/signup/badges" element={<SignUp />} />
+
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route
             path="/home"

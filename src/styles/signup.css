@@ -62,13 +62,14 @@
 
 /* Form Controls */
 .signup-input-row {
-  margin-bottom: 12px;
+  margin-bottom: 13px;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .signup-label {
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 600;
   color: #8F95B2;
   margin-bottom: 5px;
@@ -92,7 +93,7 @@
 }
 
 .signup-field-icon {
-  color: #8F95B2;
+  color: #7146FD;
   margin-right: 10px;
   display: flex;
   align-items: center;
@@ -135,19 +136,62 @@
   color: #1A1D2E;
 }
 
+.signup-country-dropdown-menu {
+  position: absolute;
+  top: 72px;
+  left: 0;
+  right: 0;
+  background: #FFFFFF;
+  border: 1px solid #EDEDF8;
+  border-radius: 12px;
+  padding: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  z-index: 30;
+}
+
+.signup-country-dropdown-item {
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1A1D2E;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.15s ease;
+}
+
+.signup-country-dropdown-item:hover {
+  background: #FAF8FF;
+}
+
+/* Eye Toggle Button */
+.signup-eye-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  color: #7146FD;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 6px;
+}
+
 /* Terms Checkbox Row */
 .signup-agreement-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin: 10px 0 20px;
+  gap: 10px;
+  margin: 12px 0 20px;
   font-size: 12px;
   color: #4A4E69;
 }
 
 .signup-checkbox {
-  width: 17px;
-  height: 17px;
+  width: 18px;
+  height: 18px;
   border-radius: 5px;
   border: 1.5px solid #D5CCFD;
   display: flex;
@@ -164,6 +208,12 @@
   border-color: #7146FD;
 }
 
+.signup-agreement-label {
+  font-size: 12px;
+  line-height: 1.4;
+  color: #4A4E69;
+}
+
 .signup-terms-link {
   color: #7146FD;
   font-weight: 600;
@@ -173,6 +223,7 @@
   cursor: pointer;
   font-size: 12px;
   text-decoration: none;
+  font-family: inherit;
 }
 
 .signup-terms-link:hover {
@@ -227,7 +278,7 @@
 /* Footer Link */
 .signup-footer-text {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 22px;
   font-size: 12.5px;
   color: #7E8299;
 }
@@ -328,6 +379,20 @@
   margin: -66px auto 14px;
   box-shadow: 0 12px 26px rgba(113, 70, 253, 0.45);
   border: 3px solid #FFFFFF;
+  position: relative;
+}
+
+/* Red notification dot on email badge matching Figma */
+.email-badge-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #FF3B30;
+  border: 1.5px solid #FFFFFF;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
 
 .signup-modal-title {
@@ -343,6 +408,57 @@
   line-height: 1.55;
   max-width: 290px;
   margin: 0 auto 20px;
+}
+
+/* 6 OTP Boxes Row */
+.phone-otp-boxes-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0 18px;
+}
+
+.phone-otp-box {
+  width: 44px;
+  height: 52px;
+  border-radius: 12px;
+  border: 1.5px solid #EDEDF8;
+  background: #FBFBFE;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 800;
+  color: #1A1D2E;
+  outline: none;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.phone-otp-box:focus {
+  border-color: #7146FD;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(113, 70, 253, 0.12);
+}
+
+.phone-otp-resend-prompt {
+  font-size: 11.5px;
+  color: #7E8299;
+  margin-bottom: 22px;
+}
+
+.phone-otp-resend-btn {
+  background: none;
+  border: none;
+  color: #7146FD;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 4px;
+  font-family: inherit;
+  font-size: 11.5px;
+}
+
+.phone-otp-resend-btn:hover {
+  text-decoration: underline;
 }
 
 /* =========================================================================
@@ -409,12 +525,11 @@
 .profile-avatar-placeholder {
   width: 72px;
   height: 72px;
-  border-radius: 20px;
+  border-radius: 22px;
   background: #EDE9FE;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 30px;
   margin-bottom: 10px;
 }
 
@@ -448,11 +563,25 @@
   align-items: flex-start;
 }
 
+.profile-achievements-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
 .profile-achievements-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #1A1D2E;
+  margin: 0;
+}
+
+.profile-achievements-sub {
   font-size: 11px;
-  font-weight: 700;
   color: #8F95B2;
-  margin-bottom: 8px;
+  font-weight: 500;
+  margin-top: 2px;
 }
 
 .profile-badges-row {
@@ -460,6 +589,38 @@
   justify-content: space-between;
   width: 100%;
   gap: 6px;
+}
+
+/* 3D Hexagonal Achievement Badge Component */
+.achievement-badge-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 58px;
+}
+
+.achievement-badge-hex-wrap {
+  position: relative;
+  width: 44px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.achievement-badge-center-icon {
+  position: absolute;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.achievement-badge-caption {
+  font-size: 8px;
+  font-weight: 700;
+  color: #4A4E69;
+  line-height: 1.25;
 }
 
 /* Profile Menu Sections */
@@ -542,11 +703,31 @@
   border-bottom: 1px solid #EDEDF8;
 }
 
+.work-profile-header-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #1A1D2E;
+  margin: 0;
+}
+
 .work-profile-body {
   padding: 20px 20px 30px;
   flex: 1;
   display: flex;
   flex-direction: column;
+}
+
+.work-profile-section-heading {
+  font-size: 14px;
+  font-weight: 800;
+  color: #1A1D2E;
+  margin-bottom: 2px;
+}
+
+.work-profile-section-sub {
+  font-size: 11.5px;
+  color: #8F95B2;
+  margin-bottom: 16px;
 }
 
 .photo-upload-container {
@@ -611,4 +792,13 @@
   color: #8F95B2;
   max-width: 220px;
   line-height: 1.35;
+}
+
+@keyframes slideUpSheet {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
