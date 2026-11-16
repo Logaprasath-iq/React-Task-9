@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import StatusBar from './components/common/StatusBar';
 import Onboarding from './pages/Onboarding';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
@@ -7,17 +8,32 @@ import ForgotPassword from './pages/ForgotPassword';
 import Home from './pages/Home';
 import './styles/global.css';
 
-export default function App() {
+function MainApp() {
   const [isEmptyState, setIsEmptyState] = useState(false);
   const [currentHomeTab, setCurrentHomeTab] = useState('home');
+  const location = useLocation();
 
   const toggleEmptyState = () => {
     setIsEmptyState(prev => !prev);
   };
 
+  const isOnboarding = location.pathname === '/onboarding' || location.pathname === '/';
+  const statusTheme = isOnboarding ? 'white' : 'dark';
+
   return (
     <div className="app-container">
-      <Router>
+      {/* Figma Top Mobile Status Bar: 08:15, Signal, Wifi, Battery */}
+      <StatusBar
+        theme={statusTheme}
+        time="08:15"
+        style={
+          isOnboarding
+            ? { position: 'absolute', top: 0, left: 0, right: 0 }
+            : { position: 'relative', background: '#FFFFFF' }
+        }
+      />
+
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', width: '100%', position: 'relative' }}>
         <Routes>
           <Route path="/" element={<Navigate to="/onboarding" replace />} />
           <Route path="/onboarding" element={<Onboarding />} />
@@ -37,7 +53,15 @@ export default function App() {
           />
           <Route path="*" element={<Navigate to="/onboarding" replace />} />
         </Routes>
-      </Router>
+      </div>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <MainApp />
+    </Router>
   );
 }
