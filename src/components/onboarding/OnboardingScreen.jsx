@@ -27,21 +27,23 @@ export default function OnboardingScreen({
           <h1 className="onboarding-title">{slide.title}</h1>
           <p className="onboarding-description">{slide.description}</p>
 
-          {/* Indicator row matching screenshot */}
-          <div className="page-indicator-row">
-            {[1, 2, 3, 4].map((stepNum, idx) => {
-              const isActive = stepNum === currentStep;
-              return (
-                <button
-                  key={stepNum}
-                  type="button"
-                  className={`indicator-bar ${isActive ? 'active' : 'inactive'}`}
-                  onClick={() => onStepSelect && onStepSelect(idx)}
-                  aria-label={`Go to slide ${stepNum}`}
-                />
-              );
-            })}
-          </div>
+          {/* Indicator row: Shown on steps 1, 2, 3; omitted on final step 4 matching Figma */}
+          {!isLastStep && (
+            <div className="page-indicator-row">
+              {[1, 2, 3, 4].map((stepNum, idx) => {
+                const isActive = stepNum === currentStep;
+                return (
+                  <button
+                    key={stepNum}
+                    type="button"
+                    className={`indicator-bar ${isActive ? 'active' : 'inactive'}`}
+                    onClick={() => onStepSelect && onStepSelect(idx)}
+                    aria-label={`Go to slide ${stepNum}`}
+                  />
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Action Buttons */}
