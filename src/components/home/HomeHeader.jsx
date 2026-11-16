@@ -1,8 +1,13 @@
 import React from 'react';
-import { Bell, Check, Search } from 'lucide-react';
+import { Bell, Check, Search, Layers } from 'lucide-react';
 import { currentUser } from '../../data/mockData';
 
-export default function HomeHeader({ onOpenNotifications, unreadCount = 2 }) {
+export default function HomeHeader({
+  onOpenNotifications,
+  unreadCount = 2,
+  isEmptyState = false,
+  onToggleEmptyState = null
+}) {
   return (
     <header className="home-header">
       <div className="home-user-info">
@@ -21,6 +26,21 @@ export default function HomeHeader({ onOpenNotifications, unreadCount = 2 }) {
       </div>
 
       <div className="home-header-actions">
+        {onToggleEmptyState && (
+          <button
+            type="button"
+            className="home-icon-btn"
+            title={isEmptyState ? 'Switch to Populated Data' : 'Switch to Empty State'}
+            onClick={onToggleEmptyState}
+            style={{
+              color: isEmptyState ? 'var(--status-orange)' : 'var(--text-muted)',
+              borderColor: isEmptyState ? 'var(--status-orange)' : 'var(--border-light)'
+            }}
+          >
+            <Layers size={18} />
+          </button>
+        )}
+
         <button
           type="button"
           className="home-icon-btn"

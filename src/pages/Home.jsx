@@ -12,7 +12,7 @@ import SubmitLeaveModal from '../components/home/SubmitLeaveModal';
 import NotificationsModal from '../components/home/NotificationsModal';
 import '../styles/home.css';
 
-export default function Home({ isEmptyState = false, activeTab: propTab, onTabChange: propOnTabChange }) {
+export default function Home({ isEmptyState = false, onToggleEmptyState, activeTab: propTab, onTabChange: propOnTabChange }) {
   const [internalTab, setInternalTab] = useState('home');
   const activeTab = propTab !== undefined ? propTab : internalTab;
   const setActiveTab = propOnTabChange || setInternalTab;
@@ -28,6 +28,8 @@ export default function Home({ isEmptyState = false, activeTab: propTab, onTabCh
       <HomeHeader
         onOpenNotifications={() => setIsNotificationsOpen(true)}
         unreadCount={2}
+        isEmptyState={isEmptyState}
+        onToggleEmptyState={onToggleEmptyState}
       />
 
       {/* Tab Views */}
