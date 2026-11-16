@@ -12,37 +12,63 @@ import SubmitLeaveModal from '../components/home/SubmitLeaveModal';
 import NotificationsModal from '../components/home/NotificationsModal';
 import '../styles/home.css';
 
-export default function Home({ isEmptyState = false, onToggleEmptyState, activeTab: propTab, onTabChange: propOnTabChange }) {
+export default function Home({
+  isEmptyState = false,
+  onToggleEmptyState,
+  activeTab: propTab,
+  onTabChange: propOnTabChange
+}) {
   const [internalTab, setInternalTab] = useState('home');
   const activeTab = propTab !== undefined ? propTab : internalTab;
   const setActiveTab = propOnTabChange || setInternalTab;
+
+  // Sub-screen state inside the Attendant/Clock-In flow:
+  // 'main' | 'clockin-map' | 'camera' | 'selfie-review' | 'details'
+  const [clockInSubScreen, setClockInSubScreen] = useState('main');
 
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
   const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
+  // Bottom navigation should only be shown on main tabs, and hidden during sub-flows like map, camera, review, or details
+  const isBottomNavVisible = !(activeTab === 'clockin' && clockInSubScreen !== 'main');
+
   return (
-    <div className="home-container">
-      {/* Top Header */}
-      <HomeHeader
-        onOpenNotifications={() => setIsNotificationsOpen(true)}
-        unreadCount={2}
-        isEmptyState={isEmptyState}
-        onToggleEmptyState={onToggleEmptyState}
-      />
+    <div
+      className="home-container"
+      style={{
+        paddingBottom: isBottomNavVisible ? '84px' : '0'
+      }}
+    >
+      {/* HomeHeader is only shown on the Home tab matching Figma */}
+      {activeTab === 'home' && (
+        <HomeHeader
+          onOpenNotifications={() => setIsNotificationsOpen(true)}
+          unreadCount={2}
+          isEmptyState={isEmptyState}
+          onToggleEmptyState={onToggleEmptyState}
+        />
+      )}
 
       {/* Tab Views */}
-      <div style={{ flex: 1 }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', width: '100%' }}>
         {activeTab === 'home' && (
           <HomeView
             isEmpty={isEmptyState}
-            onTabJump={(tab) => setActiveTab(tab)}
+            onTabJump={(tab) => {
+              setActiveTab(tab);
+              if (tab === 'clockin') setClockInSubScreen('main');
+            }}
           />
         )}
 
         {activeTab === 'clockin' && (
-          <ClockInView isEmpty={isEmptyState} />
+          <ClockInView
+            isEmpty={isEmptyState}
+            subScreen={clockInSubScreen}
+            onSubScreenChange={setClockInSubScreen}
+          />
         )}
 
         {activeTab === 'tasks' && (
@@ -67,11 +93,16 @@ export default function Home({ isEmptyState = false, onToggleEmptyState, activeT
         )}
       </div>
 
-      {/* Bottom Navigation */}
-      <BottomNavigation
-        activeTab={activeTab}
-        onTabChange={(tab) => setActiveTab(tab)}
-      />
+      {/* Bottom Navigation (Only visible on main views, hidden during sub-flows) */}
+      {isBottomNavVisible && (
+        <BottomNavigation
+          activeTab={activeTab}
+          onTabChange={(tab) => {
+            setActiveTab(tab);
+            if (tab === 'clockin') setClockInSubScreen('main');
+          }}
+        />
+      )}
 
       {/* Interactive Modals */}
       <CreateTaskModal

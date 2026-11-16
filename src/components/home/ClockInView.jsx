@@ -56,10 +56,16 @@ function WingedClockIcon({ size = 52 }) {
 // Crisp Selfie photo matching the Figma screenshot employee
 const EMPLOYEE_SELFIE_URL = 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=600&q=80';
 
-export default function ClockInView({ isEmpty = false }) {
+export default function ClockInView({
+  isEmpty = false,
+  subScreen: propSubScreen,
+  onSubScreenChange: propOnSubScreenChange
+}) {
   // Navigation within the Attendant flow:
   // 'main' | 'clockin-map' | 'camera' | 'selfie-review' | 'details'
-  const [subScreen, setSubScreen] = useState('main');
+  const [internalSubScreen, setInternalSubScreen] = useState('main');
+  const subScreen = propSubScreen !== undefined ? propSubScreen : internalSubScreen;
+  const setSubScreen = propOnSubScreenChange || setInternalSubScreen;
 
   // Attendance shift lifecycle:
   // 'initial' (clocked out, ready to start) | 'clocked-in' (working) | 'on-break' (taking break) | 'clocked-out' (finished today)
