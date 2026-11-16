@@ -72,6 +72,28 @@ function MainApp() {
               />
             }
           />
+          <Route
+            path="/attendant"
+            element={
+              <Home
+                isEmptyState={isEmptyState}
+                onToggleEmptyState={toggleEmptyState}
+                activeTab="clockin"
+                onTabChange={setCurrentHomeTab}
+              />
+            }
+          />
+          <Route
+            path="/clockin"
+            element={
+              <Home
+                isEmptyState={isEmptyState}
+                onToggleEmptyState={toggleEmptyState}
+                activeTab="clockin"
+                onTabChange={setCurrentHomeTab}
+              />
+            }
+          />
           <Route path="*" element={<Navigate to="/onboarding" replace />} />
         </Routes>
       </div>
