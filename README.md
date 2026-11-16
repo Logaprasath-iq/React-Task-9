@@ -1,15 +1,15 @@
 # Workmate – HR Management & Task Management Mobile Application
 
-> Mobile-first HR Management and Task Management frontend application built with **React.js**, **Vite**, **React Router DOM**, and **CSS3**, reproducing the Figma mobile design system.
+> Mobile-first HR Management and Task Management frontend web application built with **React.js**, **Vite**, **React Router DOM**, and **CSS3**, reproducing the Figma mobile design system.
 
 ---
 
-## 📱 Live Highlights & Architecture
+## 📱 Mobile-First Responsive Design
 
-- **Mobile-First Experience**: Designed specifically for modern mobile viewports (360×800, 375×812, 390×844, 414×896, 430×932) with native full-screen responsiveness.
-- **Desktop Device Shell**: On desktop, the app is centered in an ultra-crisp mobile frame featuring a dynamic island, status bar, and realistic device bezel.
-- **Figma Dual State (Row 1 & Row 2)**: Toggle between **Populated State** (active tasks, claims, leaves) and **Empty State** ("No Activity Available", "No Working Time", "No Task Assigned", "No Expense Submitted", "No Leave Submitted") via the top toolbar button.
-- **Screen Navigation Explorer**: Instant jump drawer to test every onboarding slide, login method, registration step, password recovery step, and HR dashboard tab.
+- **Pure Mobile Responsiveness**: 100% viewport width and height on mobile devices and small screens without artificial phone frames or device images.
+- **Desktop Adaptation**: On desktop screens, centers cleanly in a responsive mobile layout container (`max-width: 440px`) with subtle edge shading, just like modern mobile web apps.
+- **Clean UI & Natural Browser Integration**: No fake status bar, no fake notch/island, no artificial outer phone frame.
+- **Figma Dual State (Row 1 & Row 2)**: Toggle between **Populated State** (active tasks, claims, leaves) and **Empty State** (*"No Activity Available"*, *"No Working Time Available"*, *"No Task Assigned"*, *"No Expense Submitted"*, *"No Leave Submitted"*) via the discreet layer icon in the Home header.
 
 ---
 
@@ -34,7 +34,7 @@
 
 ### 2. Multi-Method Authentication (Sign In)
 - **A. Email Sign In**:
-  - Work email input, password input with toggle show/hide visibility.
+  - Work email input, password input with show/hide toggle.
   - "Remember me" checkbox and "Forgot Password?" link.
   - Social login alternatives (Google, Apple).
 - **B. Phone Number Sign In**:
@@ -42,7 +42,7 @@
   - Phone number validation and interactive 6-digit SMS OTP verification.
   - Countdown timer (45s) and Resend OTP functionality.
 - **C. Employee ID Sign In**:
-  - Designated Employee ID format (`EMP-2024-089`), Organization Code, and Security PIN.
+  - Designated Employee ID format (`EMP-2024-089`), Organization Code (`WORKMATE-GLOBAL`), and Security PIN.
 
 ### 3. Multi-Step Sign Up (Registration Flow)
 - **Step 1 (Personal Information)**: Legal First Name, Last Name, Work Email, Mobile Number.
@@ -81,7 +81,7 @@
    - **Claim Expense** interactive submission modal.
 5. **Leave Summary Tab**:
    - Leave metrics: *Total Leave (20 Days)*, *Leave Left (8 Days)*.
-   - Filter tabs: *Pending*, *Approved*, *Rejected*.
+   - Status tabs: *Pending*, *Approved*, *Rejected*.
    - Detail cards with duration dates, days count, and approval status.
    - **Submit Leave** interactive application modal.
 
@@ -89,7 +89,7 @@
 
 ## 🛠️ Technology Stack
 
-- **React 19**: Modern functional components and hooks (`useState`, `useEffect`, `useRef`).
+- **React 19**: Functional components, React Hooks (`useState`, `useEffect`, `useRef`).
 - **Vite 8**: Rapid development and optimized production bundling.
 - **React Router DOM 7**: Seamless client-side routing and browser back/forward history.
 - **Lucide React**: Modern iconography matching Figma vector styles.
@@ -112,21 +112,3 @@ npm run build
 # 4. Preview production build
 npm run preview
 ```
-
----
-
-## 🚢 Deployment to Vercel or Netlify
-
-### Vercel
-1. Push repository to GitHub.
-2. Import project into [Vercel](https://vercel.com).
-3. Framework preset: **Vite**.
-4. Build command: `npm run build`, Output directory: `dist`.
-
-### Netlify
-1. Connect repository in [Netlify](https://www.netlify.com).
-2. Build command: `npm run build`, Publish directory: `dist`.
-3. Add single-page application redirect rule in `public/_redirects`:
-   ```
-   /*    /index.html   200
-   ```
