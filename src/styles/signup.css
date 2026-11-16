@@ -187,6 +187,8 @@
   margin: 12px 0 20px;
   font-size: 12px;
   color: #4A4E69;
+  cursor: pointer;
+  user-select: none;
 }
 
 .signup-checkbox {
@@ -295,8 +297,22 @@
 }
 
 /* =========================================================================
-   TERMS & CONDITIONS AND PRIVACY POLICY VIEW (FIGMA 1:1)
+   TERMS & CONDITIONS AND PRIVACY POLICY BOTTOM SHEET (FIGMA 1:1)
    ========================================================================= */
+
+.tnc-bottom-modal {
+  background: #FFFFFF;
+  border-radius: 28px 28px 0 0;
+  padding: 26px 20px 24px;
+  width: 100%;
+  max-height: 88vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.35);
+  animation: slideUpSheet 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
 .tnc-screen-container {
   padding: 20px 22px 30px;
@@ -310,22 +326,37 @@
   font-weight: 800;
   color: #1A1D2E;
   text-align: center;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   letter-spacing: -0.3px;
 }
 
 .tnc-scroll-card {
   background: #FFFFFF;
-  border: 1px solid #EDEDF8;
+  border: 1.5px solid #EDEDF8;
   border-radius: 16px;
-  padding: 18px 16px;
+  padding: 16px 14px;
   font-size: 11.5px;
   color: #4A4E69;
   line-height: 1.6;
-  max-height: 460px;
+  flex: 1;
+  max-height: 52vh;
   overflow-y: auto;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  -webkit-overflow-scrolling: touch;
+}
+
+.tnc-scroll-card::-webkit-scrollbar {
+  width: 4px;
+}
+
+.tnc-scroll-card::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tnc-scroll-card::-webkit-scrollbar-thumb {
+  background: #D5CCFD;
+  border-radius: 4px;
 }
 
 .tnc-heading {

@@ -110,20 +110,26 @@ export default function SignUp() {
     if (p.includes('work-profile')) return 'work-profile';
     if (p.includes('badges')) return 'profile-badges';
     if (p.includes('profile')) return 'complete-profile';
-    if (p.includes('tnc')) return 'tnc';
     return 'form';
   };
 
-  // Active view: 'form' | 'tnc' | 'complete-profile' | 'work-profile' | 'profile-badges'
+  // Active view: 'form' | 'complete-profile' | 'work-profile' | 'profile-badges'
   const [currentView, setCurrentView] = useState(getViewFromPath);
+
+  // Active modal: null | 'tnc' | 'email-verification' | 'welcome' | 'confirm-update' | 'update-success'
+  const [activeModal, setActiveModal] = useState(() => {
+    if (location.pathname.toLowerCase().includes('tnc')) return 'tnc';
+    return null;
+  });
 
   // Sync route if location changes
   useEffect(() => {
+    const p = location.pathname.toLowerCase();
+    if (p.includes('tnc')) {
+      setActiveModal('tnc');
+    }
     setCurrentView(getViewFromPath());
   }, [location.pathname]);
-
-  // Active modal: null | 'email-verification' | 'welcome' | 'confirm-update' | 'update-success'
-  const [activeModal, setActiveModal] = useState(null);
 
   // Form inputs (Pre-filled matching Figma SignUp/Filled frame)
   const [email, setEmail] = useState('Tonald@work.com');
@@ -152,15 +158,41 @@ export default function SignUp() {
   const switchView = (viewName) => {
     setCurrentView(viewName);
     if (viewName === 'form') navigate('/signup');
-    else if (viewName === 'tnc') navigate('/signup/tnc');
     else if (viewName === 'complete-profile') navigate('/signup/profile');
     else if (viewName === 'work-profile') navigate('/signup/work-profile');
     else if (viewName === 'profile-badges') navigate('/signup/badges');
   };
 
-  // Form Submit -> Opens Email Verification Modal
+  // Open Terms & Conditions Modal
+  const openTncModal = () => {
+    setActiveModal('tnc');
+  };
+
+  // Agree Terms
+  const handleAgreeTnc = () => {
+    setAgreedToTerms(true);
+    setActiveModal(null);
+    if (location.pathname.toLowerCase().includes('tnc')) {
+      navigate('/signup');
+    }
+  };
+
+  // Decline Terms
+  const handleDeclineTnc = () => {
+    setAgreedToTerms(false);
+    setActiveModal(null);
+    if (location.pathname.toLowerCase().includes('tnc')) {
+      navigate('/signup');
+    }
+  };
+
+  // Form Submit -> If not agreed yet, prompt TnC modal; otherwise opens Email Verification Modal
   const handleSignUpSubmit = (e) => {
     e.preventDefault();
+    if (!agreedToTerms) {
+      openTncModal();
+      return;
+    }
     setActiveModal('email-verification');
   };
 
@@ -352,22 +384,35 @@ export default function SignUp() {
             </div>
 
             {/* Checkbox: I agree with terms & conditions and privacy policy */}
-            <div className="signup-agreement-row">
+            <div
+              className="signup-agreement-row"
+              onClick={openTncModal}
+              style={{ cursor: 'pointer' }}
+            >
               <div
                 className={`signup-checkbox ${agreedToTerms ? 'checked' : ''}`}
-                onClick={() => setAgreedToTerms(!agreedToTerms)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (!agreedToTerms) {
+                    openTncModal();
+                  } else {
+                    setAgreedToTerms(false);
+                  }
+                }}
               >
                 {agreedToTerms && <Check size={12} color="#FFFFFF" strokeWidth={3} />}
               </div>
               <div className="signup-agreement-label">
                 <span>I agree with </span>
-                <button
-                  type="button"
+                <span
                   className="signup-terms-link"
-                  onClick={() => switchView('tnc')}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openTncModal();
+                  }}
                 >
                   terms &amp; conditions and privacy policy
-                </button>
+                </span>
               </div>
             </div>
 
@@ -392,66 +437,71 @@ export default function SignUp() {
       )}
 
       {/* ===================================================================
-          2. TERMS & CONDITIONS AND PRIVACY POLICY VIEW (Figma Frame SignUp/TnC & PP)
+          MODAL 0: TERMS & CONDITIONS AND PRIVACY POLICY BOTTOM SHEET
+          (Figma Frame SignUp/TnC & PP matching media_1794833713713_28b69416.png)
           =================================================================== */}
-      {currentView === 'tnc' && (
-        <div className="tnc-screen-container">
-          <h2 className="tnc-title">Terms &amp; Conditions and Privacy Policy</h2>
+      {activeModal === 'tnc' && (
+        <div
+          className="signup-modal-backdrop"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) handleDeclineTnc();
+          }}
+        >
+          <div className="tnc-bottom-modal">
+            <h2 className="tnc-title">Terms &amp; Conditions and Privacy Policy</h2>
 
-          <div className="tnc-scroll-card">
-            <div className="tnc-heading">Terms and Conditions:</div>
-            <p>
-              <strong>Acceptance:</strong> By using the Re-Dus app, you agree to comply with all applicable terms and conditions.
-            </p>
-            <p>
-              <strong>Usage:</strong> This app is for personal use only and may not be used for commercial purposes without permission.
-            </p>
-            <p>
-              <strong>Account:</strong> You are responsible for the security of your account and all activities that occur within it.
-            </p>
-            <p>
-              <strong>Content:</strong> You must not upload content that violates copyright, privacy, or applicable laws.
-            </p>
-            <p>
-              <strong>Changes:</strong> We reserve the right to change the terms and conditions at any time and will notify you of these changes through the app or via email.
-            </p>
+            <div className="tnc-scroll-card">
+              <div className="tnc-heading">Terms and Conditions:</div>
+              <p>
+                <strong>Acceptance:</strong> By using the Re-Dus app, you agree to comply with all applicable terms and conditions.
+              </p>
+              <p>
+                <strong>Usage:</strong> This app is for personal use only and may not be used for commercial purposes without permission.
+              </p>
+              <p>
+                <strong>Account:</strong> You are responsible for the security of your account and all activities that occur within it.
+              </p>
+              <p>
+                <strong>Content:</strong> You must not upload content that violates copyright, privacy, or applicable laws.
+              </p>
+              <p>
+                <strong>Changes:</strong> We reserve the right to change the terms and conditions at any time and will notify you of these changes through the app or via email.
+              </p>
 
-            <div className="tnc-heading">Privacy Policy:</div>
-            <p>
-              <strong>Data Collection:</strong> We collect personal data such as name, email, and location to process transactions and improve our services.
-            </p>
-            <p>
-              <strong>Data Usage:</strong> Your data is used for internal purposes such as account management, usage analysis, and service offerings.
-            </p>
-            <p>
-              <strong>Security:</strong> We protect your data with appropriate security measures to prevent unauthorized access.
-            </p>
-            <p>
-              <strong>Data Sharing:</strong> We do not share your personal data with third parties without your consent, except as required by law.
-            </p>
-            <p>
-              <strong>Your Rights:</strong> You can access, update, or delete your personal data.
-            </p>
+              <div className="tnc-heading">Privacy Policy:</div>
+              <p>
+                <strong>Data Collection:</strong> We collect personal data such as name, email, and location to process transactions and improve our services.
+              </p>
+              <p>
+                <strong>Data Usage:</strong> Your data is used for internal purposes such as account management, usage analysis, and service offerings.
+              </p>
+              <p>
+                <strong>Security:</strong> We protect your data with appropriate security measures to prevent unauthorized access.
+              </p>
+              <p>
+                <strong>Data Sharing:</strong> We do not share your personal data with third parties without your consent, except as required by law.
+              </p>
+              <p>
+                <strong>Your Rights:</strong> You can access, update, or delete your personal data...
+              </p>
+            </div>
+
+            <button
+              type="button"
+              className="signup-btn-primary"
+              onClick={handleAgreeTnc}
+            >
+              I Agree
+            </button>
+
+            <button
+              type="button"
+              className="signup-btn-secondary"
+              onClick={handleDeclineTnc}
+            >
+              Decline
+            </button>
           </div>
-
-          <button
-            type="button"
-            className="signup-btn-primary"
-            onClick={() => {
-              setAgreedToTerms(true);
-              switchView('form');
-            }}
-          >
-            I Agree
-          </button>
-
-          <button
-            type="button"
-            className="signup-btn-secondary"
-            onClick={() => switchView('form')}
-          >
-            Decline
-          </button>
         </div>
       )}
 
