@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Mail,
   Eye,
@@ -41,11 +41,19 @@ function BiometricScanIcon({ size = 18, color = '#7146FD' }) {
   );
 }
 
-export default function SignIn() {
+export default function SignIn({ initialMethod }) {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const getMethodFromLocation = () => {
+    if (location.pathname.toLowerCase().includes('employee')) return 'employee';
+    if (location.pathname.toLowerCase().includes('phone-otp')) return 'phone-otp';
+    if (location.pathname.toLowerCase().includes('phone')) return 'phone';
+    return initialMethod || 'email';
+  };
 
   // Active method: 'email' | 'phone' | 'phone-otp' | 'employee'
-  const [activeMethod, setActiveMethod] = useState('email');
+  const [activeMethod, setActiveMethod] = useState(getMethodFromLocation);
 
   // Error state: 'none' | 'email-not-registered' | 'wrong-password'
   const [errorState, setErrorState] = useState('none');
@@ -65,10 +73,20 @@ export default function SignIn() {
   const [otpDigits, setOtpDigits] = useState(['1', '2', '3', '4', '5', '6']);
   const otpInputRefs = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)];
 
-  // Employee ID form state
-  const [employeeId, setEmployeeId] = useState('');
-  const [employeePassword, setEmployeePassword] = useState('');
+  // Employee ID form state (Pre-filled matching Figma Screen 2 "11234" by default)
+  const [employeeId, setEmployeeId] = useState('11234');
+  const [employeePassword, setEmployeePassword] = useState('password123');
   const [showEmployeePassword, setShowEmployeePassword] = useState(false);
+
+  // Sync activeMethod with route changes
+  useEffect(() => {
+    const method = getMethodFromLocation();
+    setActiveMethod(method);
+    if (method === 'employee') {
+      if (!employeeId) setEmployeeId('11234');
+      if (!employeePassword) setEmployeePassword('password123');
+    }
+  }, [location.pathname, initialMethod]);
 
   // Handle Email Form Submit -> Figma "Sign In Success" -> Home
   const handleEmailSubmit = (e) => {
@@ -255,6 +273,9 @@ export default function SignIn() {
             onClick={() => {
               setActiveMethod('employee');
               setErrorState('none');
+              setEmployeeId('11234');
+              setEmployeePassword('password123');
+              navigate('/signin/employee-id');
             }}
           >
             <User size={16} color="#7146FD" />
@@ -268,6 +289,7 @@ export default function SignIn() {
             onClick={() => {
               setActiveMethod('phone');
               setErrorState('none');
+              navigate('/signin/phone');
             }}
           >
             <Phone size={16} color="#7146FD" />
@@ -399,9 +421,14 @@ export default function SignIn() {
           <button
             type="button"
             className="signin-alt-btn"
-            onClick={() => setActiveMethod('employee')}
+            onClick={() => {
+              setActiveMethod('employee');
+              setEmployeeId('11234');
+              setEmployeePassword('password123');
+              navigate('/signin/employee-id');
+            }}
           >
-            <User size={16} />
+            <User size={16} color="#7146FD" />
             <span>Sign in With Employee ID</span>
           </button>
 
@@ -409,9 +436,12 @@ export default function SignIn() {
           <button
             type="button"
             className="signin-alt-btn"
-            onClick={() => setActiveMethod('email')}
+            onClick={() => {
+              setActiveMethod('email');
+              navigate('/signin');
+            }}
           >
-            <Mail size={16} />
+            <Mail size={16} color="#7146FD" />
             <span>Sign in With Email</span>
           </button>
 
@@ -513,9 +543,9 @@ export default function SignIn() {
             {/* Employee ID Field */}
             <div className="signin-field-group">
               <label className="signin-field-label">Employee ID</label>
-              <div className="signin-input-box">
+              <div className={`signin-input-box ${employeeId ? 'focused' : ''}`}>
                 <div className="signin-input-icon">
-                  <User size={16} />
+                  <User size={18} color="#7146FD" />
                 </div>
                 <input
                   type="text"
@@ -524,9 +554,17 @@ export default function SignIn() {
                   value={employeeId}
                   onChange={(e) => setEmployeeId(e.target.value)}
                 />
-                <div style={{ color: '#8F95B2' }}>
-                  <Fingerprint size={16} />
-                </div>
+                <button
+                  type="button"
+                  className="signin-icon-btn"
+                  onClick={() => {
+                    setEmployeeId('11234');
+                    setEmployeePassword('password123');
+                  }}
+                  title="Biometric Employee ID Authentication"
+                >
+                  <BiometricScanIcon size={18} color="#7146FD" />
+                </button>
               </div>
             </div>
 
@@ -535,7 +573,7 @@ export default function SignIn() {
               <label className="signin-field-label">Password</label>
               <div className="signin-input-box">
                 <div className="signin-input-icon">
-                  <Lock size={16} />
+                  <BiometricScanIcon size={18} color="#7146FD" />
                 </div>
                 <input
                   type={showEmployeePassword ? 'text' : 'password'}
@@ -547,10 +585,14 @@ export default function SignIn() {
                 <button
                   type="button"
                   className="signin-icon-btn"
-                  onClick={() => setShowEmployeePassword(prev => !prev)}
+                  onClick={() => setShowEmployeePassword((prev) => !prev)}
                   aria-label="Toggle password visibility"
                 >
-                  {showEmployeePassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showEmployeePassword ? (
+                    <Eye size={18} color="#7146FD" />
+                  ) : (
+                    <EyeOff size={18} color="#7146FD" />
+                  )}
                 </button>
               </div>
             </div>
@@ -588,9 +630,12 @@ export default function SignIn() {
           <button
             type="button"
             className="signin-alt-btn"
-            onClick={() => setActiveMethod('email')}
+            onClick={() => {
+              setActiveMethod('email');
+              navigate('/signin');
+            }}
           >
-            <Mail size={16} />
+            <Mail size={16} color="#7146FD" />
             <span>Sign in With Email</span>
           </button>
 
@@ -598,9 +643,12 @@ export default function SignIn() {
           <button
             type="button"
             className="signin-alt-btn"
-            onClick={() => setActiveMethod('phone')}
+            onClick={() => {
+              setActiveMethod('phone');
+              navigate('/signin/phone');
+            }}
           >
-            <Phone size={16} />
+            <Phone size={16} color="#7146FD" />
             <span>Sign in With Phone</span>
           </button>
 

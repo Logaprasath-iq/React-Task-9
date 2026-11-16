@@ -20,7 +20,8 @@ function MainApp() {
   const isDarkTop =
     location.pathname === '/onboarding' ||
     location.pathname === '/' ||
-    location.pathname === '/signin' ||
+    location.pathname.startsWith('/signin') ||
+    location.pathname.startsWith('/employee') ||
     location.pathname === '/forgot-password';
   const statusTheme = isDarkTop ? 'white' : 'dark';
 
@@ -41,7 +42,14 @@ function MainApp() {
         <Routes>
           <Route path="/" element={<Navigate to="/onboarding" replace />} />
           <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signin" element={<SignIn initialMethod="email" />} />
+          <Route path="/signin/email" element={<SignIn initialMethod="email" />} />
+          <Route path="/signin/employee" element={<SignIn initialMethod="employee" />} />
+          <Route path="/signin/employee-id" element={<SignIn initialMethod="employee" />} />
+          <Route path="/signin/employeeID" element={<SignIn initialMethod="employee" />} />
+          <Route path="/signin/phone" element={<SignIn initialMethod="phone" />} />
+          <Route path="/signin/phone-otp" element={<SignIn initialMethod="phone-otp" />} />
+          <Route path="/employee-id" element={<Navigate to="/signin/employee-id" replace />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route
