@@ -7,6 +7,8 @@ import SignUp from './pages/SignUp';
 import ForgotPassword from './pages/ForgotPassword';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
+import Messages from './pages/Messages';
+import Notifications from './pages/Notifications';
 import './styles/global.css';
 
 function MainApp() {
@@ -242,6 +244,12 @@ function MainApp() {
           <Route path="/profile/office-assets" element={<Profile initialSubScreen="office-assets" />} />
           <Route path="/profile/payroll" element={<Profile initialSubScreen="payroll" />} />
           <Route path="/profile/change-password" element={<Profile initialSubScreen="change-password" />} />
+
+          {/* Messages & Notifications Routes matching Figma 1:1 */}
+          <Route path="/messages" element={<Messages />} />
+          <Route path="/message" element={<Messages />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/notification" element={<Notifications />} />
 
           <Route path="*" element={<Navigate to="/onboarding" replace />} />
         </Routes>

@@ -60,7 +60,7 @@ export default function HomeHeader({
             cursor: 'pointer'
           }}
           aria-label="Messages"
-          onClick={() => alert('Chat & Messages opened')}
+          onClick={() => navigate('/messages')}
         >
           <MessageSquare size={17} fill="#7146FD" stroke="#7146FD" />
         </button>
@@ -82,7 +82,7 @@ export default function HomeHeader({
             position: 'relative'
           }}
           aria-label="Notifications"
-          onClick={onOpenNotifications}
+          onClick={() => navigate('/notifications')}
         >
           <Bell size={17} fill="#7146FD" stroke="#7146FD" />
           {unreadCount > 0 && (
