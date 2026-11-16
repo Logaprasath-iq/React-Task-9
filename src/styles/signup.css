@@ -13,44 +13,6 @@
   overflow-x: hidden;
 }
 
-/* Quick Frame Switcher Toolbar at Top (for inspecting all Figma frames) */
-.signup-frame-toolbar {
-  background: #F4F3FB;
-  border-bottom: 1px solid #ECEEF6;
-  padding: 6px 10px;
-  display: flex;
-  gap: 5px;
-  align-items: center;
-  overflow-x: auto;
-  scrollbar-width: none;
-  z-index: 50;
-}
-
-.signup-frame-toolbar::-webkit-scrollbar {
-  display: none;
-}
-
-.signup-frame-pill {
-  flex-shrink: 0;
-  background: #FFFFFF;
-  border: 1px solid #E2E4F0;
-  color: #6B7280;
-  font-size: 10.5px;
-  font-weight: 700;
-  padding: 5px 9px;
-  border-radius: 9999px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s ease;
-}
-
-.signup-frame-pill.active {
-  background: #7146FD;
-  color: #FFFFFF;
-  border-color: #7146FD;
-  box-shadow: 0 3px 8px rgba(113, 70, 253, 0.35);
-}
-
 /* Form Container */
 .signup-main-content {
   flex: 1;

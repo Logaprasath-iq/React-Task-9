@@ -43,40 +43,6 @@ export default function ForgotPassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Preset jumper for testing all Figma frames directly
-  const applyPreset = (step) => {
-    switch (step) {
-      case 'email-empty':
-        setCurrentStep('email-input');
-        setEmail('');
-        break;
-      case 'email-filled':
-        setCurrentStep('email-input');
-        setEmail('Tonald@work.com');
-        break;
-      case 'otp':
-        setCurrentStep('otp');
-        setEmail('Tonald@work.com');
-        setOtpDigits(['1', '2', '3', '1', '2', '3']);
-        break;
-      case 'new-password-empty':
-        setCurrentStep('new-password');
-        setPassword('');
-        setConfirmPassword('');
-        break;
-      case 'new-password-filled':
-        setCurrentStep('new-password');
-        setPassword('••••••••');
-        setConfirmPassword('••••••••');
-        break;
-      case 'success':
-        setCurrentStep('success');
-        break;
-      default:
-        break;
-    }
-  };
-
   // Step 1: Send Verification Code
   const handleEmailSubmit = (e) => {
     e.preventDefault();
@@ -122,45 +88,6 @@ export default function ForgotPassword() {
       {/* Background Dimmed Cards Graphic matching Figma */}
       <div className="forgot-backdrop-graphic">
         <OnboardingIllustration step={1} />
-      </div>
-
-      {/* Top Quick Navigation Toolbar for testing all 5 Figma frames */}
-      <div className="forgot-frame-toolbar">
-        <button
-          type="button"
-          className={`forgot-frame-pill ${currentStep === 'email-input' && !email ? 'active' : ''}`}
-          onClick={() => applyPreset('email-empty')}
-        >
-          1. Email Empty
-        </button>
-        <button
-          type="button"
-          className={`forgot-frame-pill ${currentStep === 'email-input' && email ? 'active' : ''}`}
-          onClick={() => applyPreset('email-filled')}
-        >
-          2. Email Filled
-        </button>
-        <button
-          type="button"
-          className={`forgot-frame-pill ${currentStep === 'otp' ? 'active' : ''}`}
-          onClick={() => applyPreset('otp')}
-        >
-          3. OTP Code
-        </button>
-        <button
-          type="button"
-          className={`forgot-frame-pill ${currentStep === 'new-password' ? 'active' : ''}`}
-          onClick={() => applyPreset('new-password-filled')}
-        >
-          4. New Password
-        </button>
-        <button
-          type="button"
-          className={`forgot-frame-pill ${currentStep === 'success' ? 'active' : ''}`}
-          onClick={() => applyPreset('success')}
-        >
-          5. Success
-        </button>
       </div>
 
       {/* ===================================================================

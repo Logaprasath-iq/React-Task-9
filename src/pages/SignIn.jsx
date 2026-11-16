@@ -45,52 +45,6 @@ export default function SignIn() {
   const [employeePassword, setEmployeePassword] = useState('');
   const [showEmployeePassword, setShowEmployeePassword] = useState(false);
 
-  // Quick Preset Helper to jump between the Figma frames directly
-  const applyPreset = (presetName) => {
-    switch (presetName) {
-      case 'email-clean':
-        setActiveMethod('email');
-        setErrorState('none');
-        setEmail('');
-        setPassword('');
-        break;
-      case 'email-filled':
-        setActiveMethod('email');
-        setErrorState('none');
-        setEmail('Tonald@Work');
-        setPassword('••••••••••••');
-        break;
-      case 'email-err':
-        setActiveMethod('email');
-        setErrorState('email-not-registered');
-        setEmail('Hello@work.com');
-        setPassword('••••••••••••');
-        break;
-      case 'pass-err':
-        setActiveMethod('email');
-        setErrorState('wrong-password');
-        setEmail('Hello@work.com');
-        setPassword('••••••••••••');
-        break;
-      case 'phone':
-        setActiveMethod('phone');
-        setErrorState('none');
-        break;
-      case 'phone-otp':
-        setActiveMethod('phone-otp');
-        setErrorState('none');
-        break;
-      case 'employee':
-        setActiveMethod('employee');
-        setErrorState('none');
-        setEmployeeId('11234');
-        setEmployeePassword('••••••••');
-        break;
-      default:
-        break;
-    }
-  };
-
   // Handle Email Form Submit
   const handleEmailSubmit = (e) => {
     e.preventDefault();
@@ -144,59 +98,6 @@ export default function SignIn() {
       {/* Dimmed Background 3D Cards Graphic matching Figma */}
       <div className="signin-backdrop-graphic">
         <OnboardingIllustration step={1} />
-      </div>
-
-      {/* Frame Switcher Bar to verify all 7 Figma frames */}
-      <div className="signin-frame-toolbar">
-        <button
-          type="button"
-          className={`signin-frame-pill ${activeMethod === 'email' && errorState === 'none' && !email ? 'active' : ''}`}
-          onClick={() => applyPreset('email-clean')}
-        >
-          Email Clean
-        </button>
-        <button
-          type="button"
-          className={`signin-frame-pill ${activeMethod === 'email' && errorState === 'none' && email ? 'active' : ''}`}
-          onClick={() => applyPreset('email-filled')}
-        >
-          Email Filled
-        </button>
-        <button
-          type="button"
-          className={`signin-frame-pill ${errorState === 'email-not-registered' ? 'active' : ''}`}
-          onClick={() => applyPreset('email-err')}
-        >
-          Email Error
-        </button>
-        <button
-          type="button"
-          className={`signin-frame-pill ${errorState === 'wrong-password' ? 'active' : ''}`}
-          onClick={() => applyPreset('pass-err')}
-        >
-          Pass Error
-        </button>
-        <button
-          type="button"
-          className={`signin-frame-pill ${activeMethod === 'phone' ? 'active' : ''}`}
-          onClick={() => applyPreset('phone')}
-        >
-          Phone
-        </button>
-        <button
-          type="button"
-          className={`signin-frame-pill ${activeMethod === 'phone-otp' ? 'active' : ''}`}
-          onClick={() => applyPreset('phone-otp')}
-        >
-          Phone OTP
-        </button>
-        <button
-          type="button"
-          className={`signin-frame-pill ${activeMethod === 'employee' ? 'active' : ''}`}
-          onClick={() => applyPreset('employee')}
-        >
-          Employee ID
-        </button>
       </div>
 
       {/* ===================================================================

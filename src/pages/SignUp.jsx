@@ -55,58 +55,6 @@ export default function SignUp() {
   const [position, setPosition] = useState('Junior Full Stack Developer');
   const [address, setAddress] = useState('Jl. Sudirman No. 45, Jakarta');
 
-  // Quick Preset Jumper for Figma frame testing
-  const applyPreset = (preset) => {
-    switch (preset) {
-      case 'form-clean':
-        setCurrentView('form');
-        setActiveModal(null);
-        setEmail('');
-        setPhoneNumber('');
-        setCompanyId('');
-        setPassword('');
-        setConfirmPassword('');
-        setAgreedToTerms(false);
-        break;
-      case 'form-filled':
-        setCurrentView('form');
-        setActiveModal(null);
-        setEmail('Tonald@work.com');
-        setPhoneNumber('+62 82190004000');
-        setCompanyId('1015615');
-        setPassword('••••••••••••');
-        setConfirmPassword('••••••••••••');
-        setAgreedToTerms(true);
-        break;
-      case 'tnc':
-        setCurrentView('tnc');
-        setActiveModal(null);
-        break;
-      case 'email-verification':
-        setCurrentView('form');
-        setActiveModal('email-verification');
-        break;
-      case 'welcome':
-        setCurrentView('form');
-        setActiveModal('welcome');
-        break;
-      case 'complete-profile':
-        setCurrentView('complete-profile');
-        setActiveModal(null);
-        break;
-      case 'work-profile':
-        setCurrentView('work-profile');
-        setActiveModal(null);
-        break;
-      case 'profile-badges':
-        setCurrentView('profile-badges');
-        setActiveModal(null);
-        break;
-      default:
-        break;
-    }
-  };
-
   // Form Submit -> Opens Email Verification Modal
   const handleSignUpSubmit = (e) => {
     e.preventDefault();
@@ -148,66 +96,6 @@ export default function SignUp() {
 
   return (
     <div className="figma-signup-container">
-      {/* Top Quick Navigation Toolbar for testing all 8 Figma frames */}
-      <div className="signup-frame-toolbar">
-        <button
-          type="button"
-          className={`signup-frame-pill ${currentView === 'form' && !activeModal && !email ? 'active' : ''}`}
-          onClick={() => applyPreset('form-clean')}
-        >
-          Form Clean
-        </button>
-        <button
-          type="button"
-          className={`signup-frame-pill ${currentView === 'form' && !activeModal && email ? 'active' : ''}`}
-          onClick={() => applyPreset('form-filled')}
-        >
-          Form Filled
-        </button>
-        <button
-          type="button"
-          className={`signup-frame-pill ${currentView === 'tnc' ? 'active' : ''}`}
-          onClick={() => applyPreset('tnc')}
-        >
-          Terms &amp; Policy
-        </button>
-        <button
-          type="button"
-          className={`signup-frame-pill ${activeModal === 'email-verification' ? 'active' : ''}`}
-          onClick={() => applyPreset('email-verification')}
-        >
-          Email OTP
-        </button>
-        <button
-          type="button"
-          className={`signup-frame-pill ${activeModal === 'welcome' ? 'active' : ''}`}
-          onClick={() => applyPreset('welcome')}
-        >
-          Welcome Modal
-        </button>
-        <button
-          type="button"
-          className={`signup-frame-pill ${currentView === 'complete-profile' ? 'active' : ''}`}
-          onClick={() => applyPreset('complete-profile')}
-        >
-          My Profile
-        </button>
-        <button
-          type="button"
-          className={`signup-frame-pill ${currentView === 'work-profile' ? 'active' : ''}`}
-          onClick={() => applyPreset('work-profile')}
-        >
-          Work Profile
-        </button>
-        <button
-          type="button"
-          className={`signup-frame-pill ${currentView === 'profile-badges' ? 'active' : ''}`}
-          onClick={() => applyPreset('profile-badges')}
-        >
-          Badges Profile
-        </button>
-      </div>
-
       {/* ===================================================================
           1. MAIN SIGN UP REGISTRATION FORM (Figma Frame SignUp)
           =================================================================== */}
