@@ -17,7 +17,11 @@ function MainApp() {
     setIsEmptyState(prev => !prev);
   };
 
-  const isDarkTop = location.pathname === '/onboarding' || location.pathname === '/' || location.pathname === '/signin';
+  const isDarkTop =
+    location.pathname === '/onboarding' ||
+    location.pathname === '/' ||
+    location.pathname === '/signin' ||
+    location.pathname === '/forgot-password';
   const statusTheme = isDarkTop ? 'white' : 'dark';
 
   return (
