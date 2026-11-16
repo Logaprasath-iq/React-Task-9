@@ -8,44 +8,49 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-end;
   background: linear-gradient(180deg, #1C173B 0%, #261E50 45%, #2D235E 100%);
   position: relative;
-  overflow-y: auto;
+  overflow-x: hidden;
   box-sizing: border-box;
-  padding: 56px 16px 28px;
 }
 
 /* Background Dimmed Cards Graphic Header */
 .signin-backdrop-graphic {
   position: absolute;
-  top: 44px;
+  top: 40px;
   left: 0;
   right: 0;
-  height: 280px;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0.18;
   pointer-events: none;
   filter: blur(2px);
-  transform: scale(0.9) translateY(-20px);
+  transform: scale(0.9) translateY(-10px);
 }
 
-/* White Bottom Sheet Container */
+/* White Bottom Sheet Container matching Figma 1:1 */
 .signin-bottom-sheet {
   background: #FFFFFF;
-  border-radius: 28px;
-  padding: 30px 22px 26px;
+  border-radius: 28px 28px 0 0;
+  padding: 32px 24px 30px;
   width: 100%;
-  max-width: 400px;
   box-sizing: border-box;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.35);
   position: relative;
   z-index: 20;
+  margin-top: auto;
+  min-height: calc(100vh - 200px);
+  display: flex;
+  flex-direction: column;
   animation: slideUpSheet 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  margin-top: -12px;
+}
+
+.signin-bottom-sheet.keyboard-open {
+  min-height: auto;
+  padding-bottom: 16px;
 }
 
 @keyframes slideUpSheet {
@@ -106,7 +111,7 @@
 .signin-input-box {
   display: flex;
   align-items: center;
-  border: 1.5px solid #EDEDF8;
+  border: 1px solid #EDEDF8;
   border-radius: 14px;
   height: 48px;
   padding: 0 14px;
@@ -116,22 +121,24 @@
   position: relative;
 }
 
+.signin-input-box.focused,
 .signin-input-box:focus-within {
   border-color: #7146FD;
-  box-shadow: 0 0 0 3px rgba(113, 70, 253, 0.12);
+  box-shadow: 0 0 0 3px rgba(113, 70, 253, 0.1);
 }
 
 .signin-input-box.error {
-  border-color: #FF4757;
-  background: #FFF8F8;
+  border: 1.5px solid #FFA2A2;
+  background: #FFFFFF;
 }
 
 .signin-input-box.error:focus-within {
-  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.15);
+  border-color: #FF6B72;
+  box-shadow: 0 0 0 3px rgba(255, 107, 114, 0.12);
 }
 
 .signin-input-icon {
-  color: #8F95B2;
+  color: #7146FD;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -160,7 +167,7 @@
   background: none;
   border: none;
   padding: 0;
-  color: #8F95B2;
+  color: #7146FD;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -169,13 +176,13 @@
 }
 
 .signin-icon-btn:hover {
-  color: #1A1D2E;
+  color: #5527EA;
 }
 
 /* Error Text Under Input */
 .signin-error-message {
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 500;
   color: #FF4757;
   margin-top: 5px;
   margin-left: 2px;
@@ -524,4 +531,127 @@
   color: #7146FD;
   font-weight: 700;
   margin-left: 4px;
+}
+
+/* =========================================================================
+   IOS VIRTUAL KEYBOARD & FIGMA FLOW SWITCHER (FIGMA 1:1)
+   ========================================================================= */
+
+.ios-virtual-keyboard {
+  background: #CFD3D9;
+  padding: 8px 5px 6px;
+  border-radius: 12px;
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  user-select: none;
+  animation: slideUpKeyboard 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpKeyboard {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+}
+
+.keyboard-key {
+  background: #FFFFFF;
+  border: none;
+  border-radius: 5px;
+  height: 38px;
+  min-width: 26px;
+  flex: 1;
+  max-width: 33px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 500;
+  color: #000000;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Roboto, sans-serif;
+  transition: background 0.1s ease;
+}
+
+.keyboard-key:active {
+  background: #B2B8C2;
+}
+
+.keyboard-key.special {
+  background: #ABB0BA;
+  max-width: 44px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1A1D2E;
+}
+
+.keyboard-key.space-key {
+  max-width: 175px;
+  font-size: 13px;
+  color: #333333;
+}
+
+.keyboard-key.action-return {
+  background: #ABB0BA;
+  max-width: 72px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1A1D2E;
+}
+
+.keyboard-bottom-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 14px 0;
+  color: #4A4E69;
+}
+
+.keyboard-home-bar {
+  width: 120px;
+  height: 4.5px;
+  background: #000000;
+  border-radius: 9999px;
+  margin: 5px auto 1px;
+  opacity: 0.8;
+}
+
+/* Subtle Figma Flow Selector */
+.figma-flow-switcher {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.figma-flow-pill {
+  background: #F4F3FB;
+  border: 1px solid #E8E5F7;
+  color: #6C5CE7;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.figma-flow-pill:hover,
+.figma-flow-pill.active {
+  background: #7146FD;
+  border-color: #7146FD;
+  color: #FFFFFF;
 }

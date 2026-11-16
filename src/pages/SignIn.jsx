@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Mail,
-  Lock,
   Eye,
   EyeOff,
   User,
@@ -10,11 +9,107 @@ import {
   Fingerprint,
   AlertCircle,
   Check,
-  ChevronDown
+  ChevronDown,
+  ArrowUp,
+  Delete,
+  Smile,
+  Mic
 } from 'lucide-react';
-import StatusBar from '../components/common/StatusBar';
 import OnboardingIllustration from '../components/onboarding/OnboardingIllustration';
 import '../styles/auth.css';
+
+// Exact Figma Biometric Scanner Icon (Corner brackets with biometric lines)
+function BiometricScanIcon({ size = 18, color = '#7146FD' }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={{ flexShrink: 0 }}
+    >
+      {/* 4 corner scanning brackets matching Figma 1:1 */}
+      <path d="M4 8V5a1 1 0 0 1 1-1h3" />
+      <path d="M16 4h3a1 1 0 0 1 1 1v3" />
+      <path d="M20 16v3a1 1 0 0 1-1 1h-3" />
+      <path d="M8 20H5a1 1 0 0 1-1-1v-3" />
+      {/* Biometric center ridges */}
+      <path d="M12 8a3.5 3.5 0 0 0-3 3.5c0 1.8 1.2 3.2 2.5 4" />
+      <path d="M15 11.5a3 3 0 0 0-3-3" />
+      <path d="M12 11.5v3" />
+    </svg>
+  );
+}
+
+// iOS Virtual Keyboard matching Figma "Fill the data" Screen
+function VirtualIOSKeyboard({ onKeyPress, onReturn }) {
+  const row1 = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
+  const row2 = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
+  const row3 = ['Z', 'X', 'C', 'V', 'B', 'N', 'M'];
+
+  return (
+    <div className="ios-virtual-keyboard">
+      {/* Row 1 */}
+      <div className="keyboard-row">
+        {row1.map((k) => (
+          <button key={k} type="button" className="keyboard-key" onClick={() => onKeyPress(k)}>
+            {k}
+          </button>
+        ))}
+      </div>
+
+      {/* Row 2 */}
+      <div className="keyboard-row">
+        {row2.map((k) => (
+          <button key={k} type="button" className="keyboard-key" onClick={() => onKeyPress(k)}>
+            {k}
+          </button>
+        ))}
+      </div>
+
+      {/* Row 3 */}
+      <div className="keyboard-row">
+        <button type="button" className="keyboard-key special" aria-label="Shift">
+          <ArrowUp size={15} strokeWidth={2.4} />
+        </button>
+        {row3.map((k) => (
+          <button key={k} type="button" className="keyboard-key" onClick={() => onKeyPress(k)}>
+            {k}
+          </button>
+        ))}
+        <button type="button" className="keyboard-key special" onClick={() => onKeyPress('BACK')} aria-label="Backspace">
+          <Delete size={15} strokeWidth={2} />
+        </button>
+      </div>
+
+      {/* Row 4 */}
+      <div className="keyboard-row">
+        <button type="button" className="keyboard-key special" style={{ minWidth: '40px' }}>
+          123
+        </button>
+        <button type="button" className="keyboard-key space-key" onClick={() => onKeyPress(' ')}>
+          space
+        </button>
+        <button type="button" className="keyboard-key action-return" onClick={onReturn}>
+          return
+        </button>
+      </div>
+
+      {/* Bottom Controls */}
+      <div className="keyboard-bottom-controls">
+        <Smile size={19} />
+        <Mic size={19} />
+      </div>
+
+      {/* iOS Home Indicator Bar */}
+      <div className="keyboard-home-bar" />
+    </div>
+  );
+}
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -22,12 +117,15 @@ export default function SignIn() {
   // Active method: 'email' | 'phone' | 'phone-otp' | 'employee'
   const [activeMethod, setActiveMethod] = useState('email');
 
-  // Error simulation state: 'none' | 'email-not-registered' | 'wrong-password'
+  // Error state: 'none' | 'email-not-registered' | 'wrong-password'
   const [errorState, setErrorState] = useState('none');
 
-  // Email form state
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  // Keyboard open state for "Fill the data" preview
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+
+  // Email form state (Pre-filled matching Figma "Hide Password" screen by default)
+  const [email, setEmail] = useState('Tonald@work.com');
+  const [password, setPassword] = useState('password123');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
 
@@ -36,7 +134,7 @@ export default function SignIn() {
   const [phoneNumber, setPhoneNumber] = useState('+62 821 0000 0000');
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
 
-  // Phone OTP state (6 digits matching Figma: 1 2 3 4 5 6)
+  // Phone OTP state
   const [otpDigits, setOtpDigits] = useState(['1', '2', '3', '4', '5', '6']);
   const otpInputRefs = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)];
 
@@ -45,7 +143,43 @@ export default function SignIn() {
   const [employeePassword, setEmployeePassword] = useState('');
   const [showEmployeePassword, setShowEmployeePassword] = useState(false);
 
-  // Handle Email Form Submit
+  // Helper to switch between exact Figma flow screens shown in user screenshots
+  const applyFigmaState = (stateKey) => {
+    setActiveMethod('email');
+    if (stateKey === 'fill-data') {
+      setEmail('Tonald@Wo');
+      setPassword('');
+      setIsKeyboardOpen(true);
+      setErrorState('none');
+    } else if (stateKey === 'hide-password') {
+      setEmail('Tonald@work.com');
+      setPassword('password123');
+      setShowPassword(false);
+      setIsKeyboardOpen(false);
+      setErrorState('none');
+    } else if (stateKey === 'email-error') {
+      setEmail('Hello@work.com');
+      setPassword('password123');
+      setIsKeyboardOpen(false);
+      setErrorState('email-not-registered');
+    } else if (stateKey === 'pass-error') {
+      setEmail('Hello@work.com');
+      setPassword('password123');
+      setIsKeyboardOpen(false);
+      setErrorState('wrong-password');
+    }
+  };
+
+  // Virtual keyboard key press handler
+  const handleVirtualKeyPress = (char) => {
+    if (char === 'BACK') {
+      setEmail((prev) => prev.slice(0, -1));
+    } else {
+      setEmail((prev) => prev + char);
+    }
+  };
+
+  // Handle Email Form Submit -> Figma "Sign In Success" -> Home
   const handleEmailSubmit = (e) => {
     e.preventDefault();
     if (errorState === 'email-not-registered' || email.toLowerCase().includes('wrong') || email.toLowerCase().includes('notreg')) {
@@ -66,7 +200,7 @@ export default function SignIn() {
     setActiveMethod('phone-otp');
   };
 
-  // Handle OTP digit change with auto-focus
+  // Handle OTP digit change with auto-advance
   const handleOtpChange = (index, value) => {
     if (value.length > 1) {
       value = value.slice(-1);
@@ -75,7 +209,6 @@ export default function SignIn() {
     newDigits[index] = value;
     setOtpDigits(newDigits);
 
-    // Auto-advance
     if (value && index < 5) {
       otpInputRefs[index + 1].current?.focus();
     }
@@ -104,7 +237,7 @@ export default function SignIn() {
           1. METHOD: EMAIL SIGN IN (Figma Row 1 & 2)
           =================================================================== */}
       {activeMethod === 'email' && (
-        <div className="signin-bottom-sheet">
+        <div className={`signin-bottom-sheet ${isKeyboardOpen ? 'keyboard-open' : ''}`}>
           <div className="signin-sheet-header">
             <h1 className="signin-sheet-title">Sign In</h1>
             <p className="signin-sheet-subtitle">Sign in to my account</p>
@@ -114,9 +247,20 @@ export default function SignIn() {
             {/* Email Field */}
             <div className="signin-field-group">
               <label className="signin-field-label">Email</label>
-              <div className={`signin-input-box ${errorState === 'email-not-registered' ? 'error' : ''}`}>
+              <div
+                className={`signin-input-box ${
+                  errorState === 'email-not-registered'
+                    ? 'error'
+                    : isKeyboardOpen || email === 'Tonald@Wo'
+                    ? 'focused'
+                    : ''
+                }`}
+              >
                 <div className="signin-input-icon">
-                  <Mail size={16} />
+                  <Mail
+                    size={18}
+                    color={errorState === 'email-not-registered' ? '#FF6B72' : '#7146FD'}
+                  />
                 </div>
                 <input
                   type="text"
@@ -127,14 +271,17 @@ export default function SignIn() {
                     setEmail(e.target.value);
                     if (errorState === 'email-not-registered') setErrorState('none');
                   }}
+                  onFocus={() => {
+                    if (errorState === 'email-not-registered') setErrorState('none');
+                  }}
                 />
                 {errorState === 'email-not-registered' && (
-                  <AlertCircle size={16} color="#FF4757" style={{ flexShrink: 0 }} />
+                  <AlertCircle size={18} color="#FF6B72" style={{ flexShrink: 0 }} />
                 )}
               </div>
               {errorState === 'email-not-registered' && (
                 <div className="signin-error-message">
-                  Email doesn't register to any account
+                  Email doesn't registered to any account
                 </div>
               )}
             </div>
@@ -144,7 +291,10 @@ export default function SignIn() {
               <label className="signin-field-label">Password</label>
               <div className={`signin-input-box ${errorState === 'wrong-password' ? 'error' : ''}`}>
                 <div className="signin-input-icon">
-                  <Lock size={16} />
+                  <BiometricScanIcon
+                    size={18}
+                    color={errorState === 'wrong-password' ? '#FF6B72' : '#7146FD'}
+                  />
                 </div>
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -159,16 +309,18 @@ export default function SignIn() {
                 <button
                   type="button"
                   className="signin-icon-btn"
-                  onClick={() => setShowPassword(prev => !prev)}
+                  onClick={() => setShowPassword((prev) => !prev)}
                   aria-label="Toggle password visibility"
                 >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showPassword ? (
+                    <Eye size={18} color="#7146FD" />
+                  ) : (
+                    <EyeOff size={18} color="#7146FD" />
+                  )}
                 </button>
               </div>
               {errorState === 'wrong-password' && (
-                <div className="signin-error-message">
-                  Wrong Password!
-                </div>
+                <div className="signin-error-message">Wrong Password</div>
               )}
             </div>
 
@@ -186,7 +338,7 @@ export default function SignIn() {
                 className="signin-forgot-link"
                 onClick={() => navigate('/forgot-password')}
               >
-                Forgot Password?
+                Forgot Password
               </button>
             </div>
 
@@ -196,46 +348,95 @@ export default function SignIn() {
             </button>
           </form>
 
-          {/* OR Divider */}
-          <div className="signin-divider">
-            <span>OR</span>
-          </div>
+          {/* Virtual iOS Keyboard (Shown when in "Fill the data" state) */}
+          {isKeyboardOpen ? (
+            <VirtualIOSKeyboard
+              onKeyPress={handleVirtualKeyPress}
+              onReturn={() => {
+                setIsKeyboardOpen(false);
+                setPassword('password123');
+              }}
+            />
+          ) : (
+            <>
+              {/* OR Divider */}
+              <div className="signin-divider">
+                <span>OR</span>
+              </div>
 
-          {/* Alternate Method 1: Sign in with Employee ID */}
-          <button
-            type="button"
-            className="signin-alt-btn"
-            onClick={() => {
-              setActiveMethod('employee');
-              setErrorState('none');
-            }}
-          >
-            <User size={16} />
-            <span>Sign in With Employee ID</span>
-          </button>
+              {/* Alternate Method 1: Sign in with Employee ID */}
+              <button
+                type="button"
+                className="signin-alt-btn"
+                onClick={() => {
+                  setActiveMethod('employee');
+                  setErrorState('none');
+                }}
+              >
+                <User size={16} color="#7146FD" />
+                <span>Sign in With Employee ID</span>
+              </button>
 
-          {/* Alternate Method 2: Sign in with Phone */}
-          <button
-            type="button"
-            className="signin-alt-btn"
-            onClick={() => {
-              setActiveMethod('phone');
-              setErrorState('none');
-            }}
-          >
-            <Phone size={16} />
-            <span>Sign in With Phone</span>
-          </button>
+              {/* Alternate Method 2: Sign in with Phone */}
+              <button
+                type="button"
+                className="signin-alt-btn"
+                onClick={() => {
+                  setActiveMethod('phone');
+                  setErrorState('none');
+                }}
+              >
+                <Phone size={16} color="#7146FD" />
+                <span>Sign in With Phone</span>
+              </button>
 
-          {/* Footer Link */}
-          <div className="signin-footer">
-            <span>Don't have an account?</span>
+              {/* Footer Link */}
+              <div className="signin-footer">
+                <span>Don't have an account?</span>
+                <button
+                  type="button"
+                  className="signin-footer-link"
+                  onClick={() => navigate('/signup')}
+                >
+                  Sign Up Here
+                </button>
+              </div>
+            </>
+          )}
+
+          {/* Discreet Figma Flow Navigator Pills (Directly matching Figma frames) */}
+          <div className="figma-flow-switcher">
             <button
               type="button"
-              className="signin-footer-link"
-              onClick={() => navigate('/signup')}
+              className={`figma-flow-pill ${isKeyboardOpen ? 'active' : ''}`}
+              onClick={() => applyFigmaState('fill-data')}
+              title="Show typing state with iOS keyboard"
             >
-              Sign Up Here
+              Fill the data
+            </button>
+            <button
+              type="button"
+              className={`figma-flow-pill ${!isKeyboardOpen && errorState === 'none' ? 'active' : ''}`}
+              onClick={() => applyFigmaState('hide-password')}
+              title="Normal filled state with hidden password"
+            >
+              Hide Password
+            </button>
+            <button
+              type="button"
+              className={`figma-flow-pill ${errorState === 'email-not-registered' ? 'active' : ''}`}
+              onClick={() => applyFigmaState('email-error')}
+              title="Email Not Registered Error"
+            >
+              Email Not Registered
+            </button>
+            <button
+              type="button"
+              className={`figma-flow-pill ${errorState === 'wrong-password' ? 'active' : ''}`}
+              onClick={() => applyFigmaState('pass-error')}
+              title="Wrong Password Error"
+            >
+              Wrong Password
             </button>
           </div>
         </div>
@@ -333,7 +534,7 @@ export default function SignIn() {
                 className="signin-forgot-link"
                 onClick={() => navigate('/forgot-password')}
               >
-                Forgot Password?
+                Forgot Password
               </button>
             </div>
 
@@ -522,7 +723,7 @@ export default function SignIn() {
                 className="signin-forgot-link"
                 onClick={() => navigate('/forgot-password')}
               >
-                Forgot Password?
+                Forgot Password
               </button>
             </div>
 

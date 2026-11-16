@@ -1,33 +1,45 @@
 import React from 'react';
-import { Home, Clock, CheckSquare, Receipt, CalendarDays } from 'lucide-react';
+import { Home, Calendar, Clock, Ticket, Layers } from 'lucide-react';
 
 export default function BottomNavigation({ activeTab, onTabChange }) {
   const tabs = [
-    { id: 'home', label: 'Home', icon: Home },
-    { id: 'clockin', label: 'Clock In', icon: Clock },
-    { id: 'tasks', label: 'Tasks', icon: CheckSquare },
-    { id: 'expense', label: 'Expense', icon: Receipt },
-    { id: 'leave', label: 'Leave', icon: CalendarDays }
+    { id: 'home', icon: Home, label: 'Home' },
+    { id: 'clockin', icon: Calendar, label: 'Calendar' },
+    { id: 'tasks', icon: Clock, label: 'Tasks' },
+    { id: 'expense', icon: Ticket, label: 'Expense' },
+    { id: 'leave', icon: Layers, label: 'Leave' }
   ];
 
   return (
-    <nav className="bottom-nav-bar" aria-label="Bottom Navigation">
-      {tabs.map((tab) => {
-        const IconComponent = tab.icon;
-        const isActive = activeTab === tab.id;
-        return (
-          <button
-            key={tab.id}
-            type="button"
-            className={`bottom-nav-item ${isActive ? 'active' : ''}`}
-            onClick={() => onTabChange(tab.id)}
-            aria-label={tab.label}
-          >
-            <IconComponent size={21} strokeWidth={isActive ? 2.4 : 1.8} />
-            <span>{tab.label}</span>
-          </button>
-        );
-      })}
+    <nav className="figma-dark-bottom-bar" aria-label="Bottom Navigation">
+      <div className="figma-bottom-nav-row">
+        {tabs.map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              className={`figma-bottom-item ${isActive ? 'active' : ''}`}
+              onClick={() => onTabChange(tab.id)}
+              aria-label={tab.label}
+            >
+              <Icon
+                size={22}
+                color={isActive ? '#FFFFFF' : '#8F95B2'}
+                strokeWidth={isActive ? 2.4 : 1.8}
+                fill={isActive && tab.id === 'home' ? '#FFFFFF' : 'none'}
+              />
+              {isActive && (
+                <div className="figma-active-indicator" />
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* iOS Home Indicator Bar */}
+      <div className="figma-home-indicator-bar" />
     </nav>
   );
 }

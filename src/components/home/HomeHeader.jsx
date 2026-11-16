@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bell, Check, MessageSquare, Layers } from 'lucide-react';
+import { Bell, MessageSquare } from 'lucide-react';
 import { currentUser } from '../../data/mockData';
 
 export default function HomeHeader({
@@ -9,58 +9,88 @@ export default function HomeHeader({
   onToggleEmptyState = null
 }) {
   return (
-    <header className="home-header">
-      <div className="home-user-info">
-        <div className="home-avatar-wrap">
-          <img src={currentUser.avatar} alt={currentUser.name} className="home-avatar-img" />
-          {/* Blue Verified Badge matching Figma 1:1 */}
-          <div className="home-verified-badge" style={{ background: '#3B82F6' }}>
-            <Check size={9} strokeWidth={3} color="#FFFFFF" />
-          </div>
+    <header className="home-header" style={{ background: '#FFFFFF', padding: '14px 20px', borderBottom: '1px solid #F0F1F7' }}>
+      <div className="home-user-info" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div className="home-avatar-wrap" style={{ width: '42px', height: '42px', position: 'relative' }}>
+          <img
+            src={currentUser.avatar}
+            alt={currentUser.name}
+            style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+          />
         </div>
         <div>
-          <div className="home-user-name">
-            <span>{currentUser.name}</span>
+          <div className="home-user-name" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontSize: '15px', fontWeight: '800', color: '#1A1D2E', letterSpacing: '-0.2px' }}>
+              {currentUser.name}
+            </span>
+            {/* Inline Blue Verified Checkmark Badge matching Figma */}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#3B82F6" style={{ flexShrink: 0 }}>
+              <circle cx="12" cy="12" r="10" fill="#3B82F6" />
+              <path d="M8.5 12.5L11 15L16 9.5" stroke="#FFFFFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </div>
-          <div className="home-user-role">{currentUser.role}</div>
+          <div className="home-user-role" style={{ fontSize: '12px', fontWeight: '600', color: '#7146FD', marginTop: '2px' }}>
+            {currentUser.role}
+          </div>
         </div>
       </div>
 
-      <div className="home-header-actions">
-        {onToggleEmptyState && (
-          <button
-            type="button"
-            className="home-icon-btn"
-            title={isEmptyState ? 'Switch to Populated Data' : 'Switch to Empty State'}
-            onClick={onToggleEmptyState}
-            style={{
-              color: isEmptyState ? '#FF8A00' : '#8F95B2',
-              borderColor: isEmptyState ? '#FF8A00' : '#EDEDF8'
-            }}
-          >
-            <Layers size={17} />
-          </button>
-        )}
-
-        {/* Chat / Message button matching Figma */}
+      <div className="home-header-actions" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        {/* Chat / Message Button matching Figma */}
         <button
           type="button"
-          className="home-icon-btn"
+          style={{
+            width: '38px',
+            height: '38px',
+            borderRadius: '50%',
+            background: '#F0EDFF',
+            border: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#7146FD',
+            cursor: 'pointer'
+          }}
           aria-label="Messages"
           onClick={() => alert('Chat & Messages opened')}
         >
-          <MessageSquare size={17} />
+          <MessageSquare size={17} fill="#7146FD" stroke="#7146FD" />
         </button>
 
-        {/* Notifications button */}
+        {/* Notifications Button matching Figma */}
         <button
           type="button"
-          className="home-icon-btn"
+          style={{
+            width: '38px',
+            height: '38px',
+            borderRadius: '50%',
+            background: '#F0EDFF',
+            border: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#7146FD',
+            cursor: 'pointer',
+            position: 'relative'
+          }}
           aria-label="Notifications"
           onClick={onOpenNotifications}
         >
-          <Bell size={17} />
-          {unreadCount > 0 && <span className="home-notification-badge" />}
+          <Bell size={17} fill="#7146FD" stroke="#7146FD" />
+          {unreadCount > 0 && (
+            <span
+              style={{
+                position: 'absolute',
+                top: '9px',
+                right: '9px',
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                background: '#FF4757',
+                border: '1.5px solid #FFFFFF'
+              }}
+            />
+          )}
         </button>
       </div>
     </header>
