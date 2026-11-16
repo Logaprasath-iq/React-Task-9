@@ -1,14 +1,14 @@
 export const currentUser = {
-  name: "Tariqul Islam",
-  role: "Senior UI/UX Designer",
-  department: "Product & Experience",
-  employeeId: "EMP-2024-089",
-  email: "tariqul.islam@workmate.io",
-  phone: "+1 (555) 382-9912",
+  name: "Tonald Drump",
+  role: "Junior Full Stack Developer",
+  department: "Technology & Engineering",
+  employeeId: "11234",
+  email: "Tonald@work.com",
+  phone: "+62 821 0000 0000",
   avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
   verified: true,
-  joinDate: "March 2022",
-  workLocation: "San Francisco, CA (HQ)"
+  joinDate: "January 2023",
+  workLocation: "Jakarta, Indonesia (HQ)"
 };
 
 export const onboardingSlides = [

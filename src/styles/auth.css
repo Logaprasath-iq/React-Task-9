@@ -1,3 +1,502 @@
+/* =========================================================================
+   WORKMATE AUTHENTICATION & SIGN IN STYLES - FIGMA 1:1 REPRODUCTION
+   ========================================================================= */
+
+/* Main Full Screen Sign In Wrapper with Dark Backdrop */
+.signin-backdrop-screen {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: linear-gradient(180deg, #1C173B 0%, #261E50 45%, #2D235E 100%);
+  position: relative;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* Background Dimmed Cards Graphic Header */
+.signin-backdrop-graphic {
+  position: absolute;
+  top: 44px;
+  left: 0;
+  right: 0;
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.18;
+  pointer-events: none;
+  filter: blur(2px);
+  transform: scale(0.9) translateY(-20px);
+}
+
+/* Interactive Frame Selector Bar at Top (for testing all Figma states) */
+.signin-frame-toolbar {
+  position: absolute;
+  top: 48px;
+  left: 12px;
+  right: 12px;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 9999px;
+  padding: 4px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.signin-frame-toolbar::-webkit-scrollbar {
+  display: none;
+}
+
+.signin-frame-pill {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #D1D5DB;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 6px 4px;
+  border-radius: 9999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.signin-frame-pill.active {
+  background: #7146FD;
+  color: #FFFFFF;
+  box-shadow: 0 4px 10px rgba(113, 70, 253, 0.4);
+}
+
+/* White Bottom Sheet Container */
+.signin-bottom-sheet {
+  background: #FFFFFF;
+  border-radius: 28px 28px 0 0;
+  padding: 30px 22px 28px;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.35);
+  position: relative;
+  z-index: 20;
+  animation: slideUpSheet 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpSheet {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Drag Handle / Bar Indicator */
+.signin-sheet-handle {
+  width: 36px;
+  height: 4px;
+  background: #E5E7EB;
+  border-radius: 9999px;
+  margin: 0 auto 16px;
+}
+
+/* Header Inside Sheet */
+.signin-sheet-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.signin-sheet-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1A1D2E;
+  margin-bottom: 4px;
+  letter-spacing: -0.3px;
+}
+
+.signin-sheet-subtitle {
+  font-size: 12.5px;
+  color: #8F95B2;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Form Groups & Inputs */
+.signin-field-group {
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.signin-field-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #8F95B2;
+  margin-bottom: 6px;
+}
+
+.signin-input-box {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid #EDEDF8;
+  border-radius: 14px;
+  height: 48px;
+  padding: 0 14px;
+  background: #FFFFFF;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.signin-input-box:focus-within {
+  border-color: #7146FD;
+  box-shadow: 0 0 0 3px rgba(113, 70, 253, 0.12);
+}
+
+.signin-input-box.error {
+  border-color: #FF4757;
+  background: #FFF8F8;
+}
+
+.signin-input-box.error:focus-within {
+  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.15);
+}
+
+.signin-input-icon {
+  color: #8F95B2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 10px;
+}
+
+.signin-input-control {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1A1D2E;
+  font-family: inherit;
+  width: 100%;
+}
+
+.signin-input-control::placeholder {
+  color: #A0A5BD;
+  font-weight: 500;
+}
+
+.signin-icon-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #8F95B2;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.signin-icon-btn:hover {
+  color: #1A1D2E;
+}
+
+/* Error Text Under Input */
+.signin-error-message {
+  font-size: 11px;
+  font-weight: 600;
+  color: #FF4757;
+  margin-top: 5px;
+  margin-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Options Row (Remember Me + Forgot Password) */
+.signin-options-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 6px 0 18px;
+  font-size: 12.5px;
+}
+
+.signin-remember-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #4A4E69;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+}
+
+.signin-custom-checkbox {
+  width: 17px;
+  height: 17px;
+  border-radius: 5px;
+  border: 1.5px solid #D5CCFD;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.signin-custom-checkbox.checked {
+  background: #7146FD;
+  border-color: #7146FD;
+}
+
+.signin-forgot-link {
+  color: #7146FD;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.signin-forgot-link:hover {
+  text-decoration: underline;
+}
+
+/* Primary Pill Submit Button */
+.signin-primary-btn {
+  width: 100%;
+  height: 48px;
+  border-radius: 9999px;
+  background: #7146FD;
+  color: #FFFFFF;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(113, 70, 253, 0.35);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+}
+
+.signin-primary-btn:active {
+  transform: scale(0.98);
+}
+
+/* OR Divider */
+.signin-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0 14px;
+  color: #8F95B2;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.signin-divider::before,
+.signin-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #ECEEF6;
+}
+
+/* Secondary Outlined Alternate Method Buttons */
+.signin-alt-btn {
+  width: 100%;
+  height: 46px;
+  border-radius: 9999px;
+  border: 1.5px solid #D5CCFD;
+  background: #FFFFFF;
+  color: #7146FD;
+  font-size: 13.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.signin-alt-btn:hover {
+  background: #FAF8FF;
+  border-color: #7146FD;
+}
+
+.signin-alt-btn:active {
+  transform: scale(0.98);
+}
+
+/* Footer Link (Don't have an account? Sign Up Here) */
+.signin-footer {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: #7E8299;
+}
+
+.signin-footer-link {
+  color: #7146FD;
+  font-weight: 700;
+  border: none;
+  background: none;
+  cursor: pointer;
+  margin-left: 4px;
+  font-family: inherit;
+  font-size: 12.5px;
+}
+
+.signin-footer-link:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================================
+   PHONE NUMBER OTP VERIFICATION SHEET (FIGMA 1:1)
+   ========================================================================= */
+
+.phone-otp-sheet {
+  background: #FFFFFF;
+  border-radius: 28px 28px 0 0;
+  padding: 40px 22px 28px;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.35);
+  position: relative;
+  z-index: 20;
+  animation: slideUpSheet 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+}
+
+/* Floating Purple Phone Icon Badge */
+.phone-otp-floating-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  background: #7146FD;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  margin: -68px auto 14px;
+  box-shadow: 0 12px 26px rgba(113, 70, 253, 0.45);
+  border: 3px solid #FFFFFF;
+}
+
+.phone-otp-title {
+  font-size: 19px;
+  font-weight: 800;
+  color: #1A1D2E;
+  margin-bottom: 6px;
+  letter-spacing: -0.3px;
+}
+
+.phone-otp-instruction {
+  font-size: 12px;
+  color: #7E8299;
+  line-height: 1.5;
+  max-width: 290px;
+  margin: 0 auto 20px;
+}
+
+.phone-otp-target {
+  font-weight: 800;
+  color: #1A1D2E;
+}
+
+/* 6 OTP Boxes Row */
+.phone-otp-boxes-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 18px 0;
+}
+
+.phone-otp-box {
+  width: 44px;
+  height: 52px;
+  border-radius: 12px;
+  border: 1.5px solid #EDEDF8;
+  background: #FAFAFE;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 800;
+  color: #1A1D2E;
+  outline: none;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.phone-otp-box:focus {
+  border-color: #7146FD;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(113, 70, 253, 0.12);
+}
+
+.phone-otp-resend-prompt {
+  font-size: 12px;
+  color: #7E8299;
+  margin-bottom: 20px;
+}
+
+.phone-otp-resend-btn {
+  color: #7146FD;
+  font-weight: 700;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 4px;
+  font-family: inherit;
+}
+
+.phone-otp-diff-method {
+  margin-top: 14px;
+  font-size: 12px;
+  color: #7E8299;
+}
+
+/* Country Selector Inside Input */
+.signin-country-selector {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-right: 10px;
+  border-right: 1px solid #ECEEF6;
+  margin-right: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.signin-country-code {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1A1D2E;
+}
+
+/* =========================================================================
+   LEGACY / COMPATIBILITY STYLES FOR SIGN UP & FORGOT PASSWORD
+   ========================================================================= */
+
 .auth-screen-container {
   display: flex;
   flex-direction: column;
@@ -13,7 +512,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
 .auth-logo-badge {
@@ -45,122 +544,12 @@
   line-height: 1.5;
 }
 
-/* Method Switcher Tabs */
-.auth-method-tabs {
-  display: flex;
-  background: #F0EEFC;
-  padding: 4px;
-  border-radius: 9999px;
-  margin-bottom: 24px;
-  border: 1px solid #E4E0FB;
-}
-
-.auth-tab-btn {
-  flex: 1;
-  padding: 10px 8px;
-  text-align: center;
-  font-size: 13px;
-  font-weight: 600;
-  color: #7E8299;
-  border-radius: 9999px;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.auth-tab-btn.active {
-  background: #FFFFFF;
-  color: #7146FD;
-  font-weight: 700;
-  box-shadow: 0 4px 14px rgba(113, 70, 253, 0.16);
-}
-
 .auth-form {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-.auth-options-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 6px 0 22px;
-  font-size: 13px;
-}
-
-.auth-remember-me {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #4A4E69;
-  cursor: pointer;
-  user-select: none;
-}
-
-.auth-remember-me input[type="checkbox"] {
-  width: 17px;
-  height: 17px;
-  accent-color: #7146FD;
-  cursor: pointer;
-}
-
-.auth-forgot-link {
-  color: #7146FD;
-  font-weight: 700;
-  transition: color 0.2s ease;
-}
-
-.auth-forgot-link:hover {
-  text-decoration: underline;
-}
-
-/* Divider */
-.auth-divider {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 26px 0 20px;
-  color: #8F95B2;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.auth-divider::before,
-.auth-divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: #ECEEF6;
-}
-
-/* Social Buttons */
-.auth-social-row {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
-}
-
-.auth-social-btn {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: 50px;
-  border: 1.5px solid #EDEDF8;
-  border-radius: 9999px;
-  background: #FFFFFF;
-  font-size: 14px;
-  font-weight: 700;
-  color: #1A1D2E;
-  transition: all 0.2s ease;
-}
-
-.auth-social-btn:hover {
-  background: #FAF8FF;
-  border-color: #D5CCFD;
-}
-
-/* Auth Footer Link */
 .auth-footer {
   margin-top: auto;
   padding-top: 18px;

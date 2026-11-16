@@ -1,59 +1,680 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AuthLayout from '../components/auth/AuthLayout';
-import EmailLogin from '../components/auth/EmailLogin';
-import PhoneLogin from '../components/auth/PhoneLogin';
-import EmployeeLogin from '../components/auth/EmployeeLogin';
+import {
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  User,
+  Phone,
+  Fingerprint,
+  AlertCircle,
+  Check,
+  ChevronDown
+} from 'lucide-react';
+import StatusBar from '../components/common/StatusBar';
+import OnboardingIllustration from '../components/onboarding/OnboardingIllustration';
+import '../styles/auth.css';
 
 export default function SignIn() {
-  const [activeMethod, setActiveMethod] = useState('email');
   const navigate = useNavigate();
 
-  const getTitles = () => {
-    switch (activeMethod) {
+  // Active method: 'email' | 'phone' | 'phone-otp' | 'employee'
+  const [activeMethod, setActiveMethod] = useState('email');
+
+  // Error simulation state: 'none' | 'email-not-registered' | 'wrong-password'
+  const [errorState, setErrorState] = useState('none');
+
+  // Email form state
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
+
+  // Phone form state
+  const [phoneCode, setPhoneCode] = useState('INA');
+  const [phoneNumber, setPhoneNumber] = useState('+62 821 0000 0000');
+  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
+
+  // Phone OTP state (6 digits matching Figma: 1 2 3 4 5 6)
+  const [otpDigits, setOtpDigits] = useState(['1', '2', '3', '4', '5', '6']);
+  const otpInputRefs = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)];
+
+  // Employee ID form state
+  const [employeeId, setEmployeeId] = useState('');
+  const [employeePassword, setEmployeePassword] = useState('');
+  const [showEmployeePassword, setShowEmployeePassword] = useState(false);
+
+  // Quick Preset Helper to jump between the Figma frames directly
+  const applyPreset = (presetName) => {
+    switch (presetName) {
+      case 'email-clean':
+        setActiveMethod('email');
+        setErrorState('none');
+        setEmail('');
+        setPassword('');
+        break;
+      case 'email-filled':
+        setActiveMethod('email');
+        setErrorState('none');
+        setEmail('Tonald@Work');
+        setPassword('••••••••••••');
+        break;
+      case 'email-err':
+        setActiveMethod('email');
+        setErrorState('email-not-registered');
+        setEmail('Hello@work.com');
+        setPassword('••••••••••••');
+        break;
+      case 'pass-err':
+        setActiveMethod('email');
+        setErrorState('wrong-password');
+        setEmail('Hello@work.com');
+        setPassword('••••••••••••');
+        break;
       case 'phone':
-        return {
-          title: 'Sign In with Phone',
-          subtitle: 'Enter your phone number to receive a secure login OTP.'
-        };
+        setActiveMethod('phone');
+        setErrorState('none');
+        break;
+      case 'phone-otp':
+        setActiveMethod('phone-otp');
+        setErrorState('none');
+        break;
       case 'employee':
-        return {
-          title: 'Employee ID Sign In',
-          subtitle: 'Enter your designated company credentials to access your workspace.'
-        };
-      case 'email':
+        setActiveMethod('employee');
+        setErrorState('none');
+        setEmployeeId('11234');
+        setEmployeePassword('••••••••');
+        break;
       default:
-        return {
-          title: 'Welcome Back 👋',
-          subtitle: 'Sign in to access your HR tasks, attendance, and benefits.'
-        };
+        break;
     }
   };
 
-  const { title, subtitle } = getTitles();
+  // Handle Email Form Submit
+  const handleEmailSubmit = (e) => {
+    e.preventDefault();
+    if (errorState === 'email-not-registered' || email.toLowerCase().includes('wrong') || email.toLowerCase().includes('notreg')) {
+      setErrorState('email-not-registered');
+      return;
+    }
+    if (errorState === 'wrong-password' || password === 'wrong') {
+      setErrorState('wrong-password');
+      return;
+    }
+    // Success -> Navigate to Home matching Figma "Sign In Success"
+    navigate('/home');
+  };
+
+  // Handle Phone Form Submit -> Opens OTP Sheet
+  const handlePhoneSubmit = (e) => {
+    e.preventDefault();
+    setActiveMethod('phone-otp');
+  };
+
+  // Handle OTP digit change with auto-focus
+  const handleOtpChange = (index, value) => {
+    if (value.length > 1) {
+      value = value.slice(-1);
+    }
+    const newDigits = [...otpDigits];
+    newDigits[index] = value;
+    setOtpDigits(newDigits);
+
+    // Auto-advance
+    if (value && index < 5) {
+      otpInputRefs[index + 1].current?.focus();
+    }
+  };
+
+  const handleOtpKeyDown = (index, e) => {
+    if (e.key === 'Backspace' && !otpDigits[index] && index > 0) {
+      otpInputRefs[index - 1].current?.focus();
+    }
+  };
+
+  // Handle Employee Submit
+  const handleEmployeeSubmit = (e) => {
+    e.preventDefault();
+    navigate('/home');
+  };
 
   return (
-    <AuthLayout
-      title={title}
-      subtitle={subtitle}
-      activeMethod={activeMethod}
-      onMethodChange={setActiveMethod}
-      showMethodTabs={true}
-      showSocial={true}
-      backTo="/onboarding"
-      footerText="Don't have an account?"
-      footerLinkText="Sign Up"
-      onFooterClick={() => navigate('/signup')}
-    >
+    <div className="signin-backdrop-screen">
+      {/* Dimmed Background 3D Cards Graphic matching Figma */}
+      <div className="signin-backdrop-graphic">
+        <OnboardingIllustration step={1} />
+      </div>
+
+      {/* Frame Switcher Bar to verify all 7 Figma frames */}
+      <div className="signin-frame-toolbar">
+        <button
+          type="button"
+          className={`signin-frame-pill ${activeMethod === 'email' && errorState === 'none' && !email ? 'active' : ''}`}
+          onClick={() => applyPreset('email-clean')}
+        >
+          Email Clean
+        </button>
+        <button
+          type="button"
+          className={`signin-frame-pill ${activeMethod === 'email' && errorState === 'none' && email ? 'active' : ''}`}
+          onClick={() => applyPreset('email-filled')}
+        >
+          Email Filled
+        </button>
+        <button
+          type="button"
+          className={`signin-frame-pill ${errorState === 'email-not-registered' ? 'active' : ''}`}
+          onClick={() => applyPreset('email-err')}
+        >
+          Email Error
+        </button>
+        <button
+          type="button"
+          className={`signin-frame-pill ${errorState === 'wrong-password' ? 'active' : ''}`}
+          onClick={() => applyPreset('pass-err')}
+        >
+          Pass Error
+        </button>
+        <button
+          type="button"
+          className={`signin-frame-pill ${activeMethod === 'phone' ? 'active' : ''}`}
+          onClick={() => applyPreset('phone')}
+        >
+          Phone
+        </button>
+        <button
+          type="button"
+          className={`signin-frame-pill ${activeMethod === 'phone-otp' ? 'active' : ''}`}
+          onClick={() => applyPreset('phone-otp')}
+        >
+          Phone OTP
+        </button>
+        <button
+          type="button"
+          className={`signin-frame-pill ${activeMethod === 'employee' ? 'active' : ''}`}
+          onClick={() => applyPreset('employee')}
+        >
+          Employee ID
+        </button>
+      </div>
+
+      {/* ===================================================================
+          1. METHOD: EMAIL SIGN IN (Figma Row 1 & 2)
+          =================================================================== */}
       {activeMethod === 'email' && (
-        <EmailLogin onLoginSuccess={() => navigate('/home')} />
+        <div className="signin-bottom-sheet">
+          <div className="signin-sheet-handle" />
+
+          <div className="signin-sheet-header">
+            <h1 className="signin-sheet-title">Sign In</h1>
+            <p className="signin-sheet-subtitle">Sign in to my account</p>
+          </div>
+
+          <form onSubmit={handleEmailSubmit}>
+            {/* Email Field */}
+            <div className="signin-field-group">
+              <label className="signin-field-label">Email</label>
+              <div className={`signin-input-box ${errorState === 'email-not-registered' ? 'error' : ''}`}>
+                <div className="signin-input-icon">
+                  <Mail size={16} />
+                </div>
+                <input
+                  type="text"
+                  className="signin-input-control"
+                  placeholder="My Email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (errorState === 'email-not-registered') setErrorState('none');
+                  }}
+                />
+                {errorState === 'email-not-registered' && (
+                  <AlertCircle size={16} color="#FF4757" style={{ flexShrink: 0 }} />
+                )}
+              </div>
+              {errorState === 'email-not-registered' && (
+                <div className="signin-error-message">
+                  Email doesn't register to any account
+                </div>
+              )}
+            </div>
+
+            {/* Password Field */}
+            <div className="signin-field-group">
+              <label className="signin-field-label">Password</label>
+              <div className={`signin-input-box ${errorState === 'wrong-password' ? 'error' : ''}`}>
+                <div className="signin-input-icon">
+                  <Lock size={16} />
+                </div>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  className="signin-input-control"
+                  placeholder="My Password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (errorState === 'wrong-password') setErrorState('none');
+                  }}
+                />
+                <button
+                  type="button"
+                  className="signin-icon-btn"
+                  onClick={() => setShowPassword(prev => !prev)}
+                  aria-label="Toggle password visibility"
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+              {errorState === 'wrong-password' && (
+                <div className="signin-error-message">
+                  Wrong Password!
+                </div>
+              )}
+            </div>
+
+            {/* Remember Me & Forgot Password Row */}
+            <div className="signin-options-row">
+              <label className="signin-remember-label" onClick={() => setRememberMe(!rememberMe)}>
+                <div className={`signin-custom-checkbox ${rememberMe ? 'checked' : ''}`}>
+                  {rememberMe && <Check size={12} color="#FFFFFF" strokeWidth={3} />}
+                </div>
+                <span>Remember Me</span>
+              </label>
+
+              <button
+                type="button"
+                className="signin-forgot-link"
+                onClick={() => navigate('/forgot-password')}
+              >
+                Forgot Password?
+              </button>
+            </div>
+
+            {/* Primary Sign In Button */}
+            <button type="submit" className="signin-primary-btn">
+              Sign In
+            </button>
+          </form>
+
+          {/* OR Divider */}
+          <div className="signin-divider">
+            <span>OR</span>
+          </div>
+
+          {/* Alternate Method 1: Sign in with Employee ID */}
+          <button
+            type="button"
+            className="signin-alt-btn"
+            onClick={() => {
+              setActiveMethod('employee');
+              setErrorState('none');
+            }}
+          >
+            <User size={16} />
+            <span>Sign in With Employee ID</span>
+          </button>
+
+          {/* Alternate Method 2: Sign in with Phone */}
+          <button
+            type="button"
+            className="signin-alt-btn"
+            onClick={() => {
+              setActiveMethod('phone');
+              setErrorState('none');
+            }}
+          >
+            <Phone size={16} />
+            <span>Sign in With Phone</span>
+          </button>
+
+          {/* Footer Link */}
+          <div className="signin-footer">
+            <span>Don't have an account?</span>
+            <button
+              type="button"
+              className="signin-footer-link"
+              onClick={() => navigate('/signup')}
+            >
+              Sign Up Here
+            </button>
+          </div>
+        </div>
       )}
+
+      {/* ===================================================================
+          2. METHOD: PHONE SIGN IN (Figma Sign In Phone Number)
+          =================================================================== */}
       {activeMethod === 'phone' && (
-        <PhoneLogin onLoginSuccess={() => navigate('/home')} />
+        <div className="signin-bottom-sheet">
+          <div className="signin-sheet-handle" />
+
+          <div className="signin-sheet-header">
+            <h1 className="signin-sheet-title">Sign In</h1>
+            <p className="signin-sheet-subtitle">Sign in to my account</p>
+          </div>
+
+          <form onSubmit={handlePhoneSubmit}>
+            {/* Phone Number Field */}
+            <div className="signin-field-group">
+              <label className="signin-field-label">Phone Number</label>
+              <div className="signin-input-box">
+                {/* Country Code Dropdown */}
+                <div
+                  className="signin-country-selector"
+                  onClick={() => setShowCountryDropdown(!showCountryDropdown)}
+                >
+                  <span className="signin-country-code">{phoneCode}</span>
+                  <ChevronDown size={14} color="#8F95B2" />
+                </div>
+
+                <input
+                  type="text"
+                  className="signin-input-control"
+                  placeholder="+62 821 0000 0000"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                />
+              </div>
+
+              {/* Country selector dropdown list */}
+              {showCountryDropdown && (
+                <div
+                  style={{
+                    background: '#FFFFFF',
+                    border: '1px solid #EDEDF8',
+                    borderRadius: '12px',
+                    padding: '6px',
+                    marginTop: '6px',
+                    boxShadow: '0 8px 20px rgba(0,0,0,0.08)',
+                    zIndex: 10
+                  }}
+                >
+                  {[
+                    { code: 'INA', prefix: '+62', name: 'Indonesia' },
+                    { code: 'USA', prefix: '+1', name: 'United States' },
+                    { code: 'GBR', prefix: '+44', name: 'United Kingdom' },
+                    { code: 'IND', prefix: '+91', name: 'India' }
+                  ].map((c) => (
+                    <div
+                      key={c.code}
+                      onClick={() => {
+                        setPhoneCode(c.code);
+                        setPhoneNumber(`${c.prefix} `);
+                        setShowCountryDropdown(false);
+                      }}
+                      style={{
+                        padding: '6px 10px',
+                        fontSize: '12px',
+                        fontWeight: '600',
+                        color: '#1A1D2E',
+                        cursor: 'pointer',
+                        borderRadius: '6px',
+                        display: 'flex',
+                        justifyContent: 'space-between'
+                      }}
+                    >
+                      <span>{c.name} ({c.code})</span>
+                      <span style={{ color: '#7146FD' }}>{c.prefix}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Options Row */}
+            <div className="signin-options-row">
+              <label className="signin-remember-label" onClick={() => setRememberMe(!rememberMe)}>
+                <div className={`signin-custom-checkbox ${rememberMe ? 'checked' : ''}`}>
+                  {rememberMe && <Check size={12} color="#FFFFFF" strokeWidth={3} />}
+                </div>
+                <span>Remember Me</span>
+              </label>
+
+              <button
+                type="button"
+                className="signin-forgot-link"
+                onClick={() => navigate('/forgot-password')}
+              >
+                Forgot Password?
+              </button>
+            </div>
+
+            {/* Primary Sign In Button */}
+            <button type="submit" className="signin-primary-btn">
+              Sign In
+            </button>
+          </form>
+
+          {/* OR Divider */}
+          <div className="signin-divider">
+            <span>OR</span>
+          </div>
+
+          {/* Alternate 1: Sign in with Employee ID */}
+          <button
+            type="button"
+            className="signin-alt-btn"
+            onClick={() => setActiveMethod('employee')}
+          >
+            <User size={16} />
+            <span>Sign in With Employee ID</span>
+          </button>
+
+          {/* Alternate 2: Sign in with Email */}
+          <button
+            type="button"
+            className="signin-alt-btn"
+            onClick={() => setActiveMethod('email')}
+          >
+            <Mail size={16} />
+            <span>Sign in With Email</span>
+          </button>
+
+          {/* Footer */}
+          <div className="signin-footer">
+            <span>Don't have an account?</span>
+            <button
+              type="button"
+              className="signin-footer-link"
+              onClick={() => navigate('/signup')}
+            >
+              Sign Up Here
+            </button>
+          </div>
+        </div>
       )}
+
+      {/* ===================================================================
+          3. METHOD: PHONE NUMBER OTP SHEET (Figma 1:1 with floating purple badge)
+          =================================================================== */}
+      {activeMethod === 'phone-otp' && (
+        <div className="phone-otp-sheet">
+          {/* Floating Purple Phone Icon Badge matching Figma screenshot */}
+          <div className="phone-otp-floating-icon">
+            <Phone size={26} strokeWidth={2.4} fill="#FFFFFF" />
+          </div>
+
+          <h2 className="phone-otp-title">Sign In Phone Number</h2>
+
+          <p className="phone-otp-instruction">
+            Sign in code has been sent to{' '}
+            <span className="phone-otp-target">+6292121002200</span>
+            , check your inbox to continue the sign in process.
+          </p>
+
+          {/* 6 OTP Boxes */}
+          <div className="phone-otp-boxes-row">
+            {otpDigits.map((digit, i) => (
+              <input
+                key={i}
+                ref={otpInputRefs[i]}
+                type="text"
+                inputMode="numeric"
+                maxLength={1}
+                className="phone-otp-box"
+                value={digit}
+                onChange={(e) => handleOtpChange(i, e.target.value)}
+                onKeyDown={(e) => handleOtpKeyDown(i, e)}
+              />
+            ))}
+          </div>
+
+          {/* Resend Link */}
+          <div className="phone-otp-resend-prompt">
+            Haven't received the sign in code?
+            <button
+              type="button"
+              className="phone-otp-resend-btn"
+              onClick={() => alert('New OTP code resent to +6292121002200')}
+            >
+              Resend it.
+            </button>
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="button"
+            className="signin-primary-btn"
+            onClick={() => navigate('/home')}
+          >
+            Submit
+          </button>
+
+          {/* Different Method Link */}
+          <div className="phone-otp-diff-method">
+            Sign in with different method{' '}
+            <button
+              type="button"
+              className="signin-footer-link"
+              onClick={() => setActiveMethod('email')}
+            >
+              Here.
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ===================================================================
+          4. METHOD: EMPLOYEE ID SIGN IN (Figma Sign In Employee ID)
+          =================================================================== */}
       {activeMethod === 'employee' && (
-        <EmployeeLogin onLoginSuccess={() => navigate('/home')} />
+        <div className="signin-bottom-sheet">
+          <div className="signin-sheet-handle" />
+
+          <div className="signin-sheet-header">
+            <h1 className="signin-sheet-title">Sign In</h1>
+            <p className="signin-sheet-subtitle">Sign in to my account</p>
+          </div>
+
+          <form onSubmit={handleEmployeeSubmit}>
+            {/* Employee ID Field */}
+            <div className="signin-field-group">
+              <label className="signin-field-label">Employee ID</label>
+              <div className="signin-input-box">
+                <div className="signin-input-icon">
+                  <User size={16} />
+                </div>
+                <input
+                  type="text"
+                  className="signin-input-control"
+                  placeholder="My Employee ID"
+                  value={employeeId}
+                  onChange={(e) => setEmployeeId(e.target.value)}
+                />
+                <div style={{ color: '#8F95B2' }}>
+                  <Fingerprint size={16} />
+                </div>
+              </div>
+            </div>
+
+            {/* Password Field */}
+            <div className="signin-field-group">
+              <label className="signin-field-label">Password</label>
+              <div className="signin-input-box">
+                <div className="signin-input-icon">
+                  <Lock size={16} />
+                </div>
+                <input
+                  type={showEmployeePassword ? 'text' : 'password'}
+                  className="signin-input-control"
+                  placeholder="My Password"
+                  value={employeePassword}
+                  onChange={(e) => setEmployeePassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  className="signin-icon-btn"
+                  onClick={() => setShowEmployeePassword(prev => !prev)}
+                  aria-label="Toggle password visibility"
+                >
+                  {showEmployeePassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </div>
+
+            {/* Options Row */}
+            <div className="signin-options-row">
+              <label className="signin-remember-label" onClick={() => setRememberMe(!rememberMe)}>
+                <div className={`signin-custom-checkbox ${rememberMe ? 'checked' : ''}`}>
+                  {rememberMe && <Check size={12} color="#FFFFFF" strokeWidth={3} />}
+                </div>
+                <span>Remember Me</span>
+              </label>
+
+              <button
+                type="button"
+                className="signin-forgot-link"
+                onClick={() => navigate('/forgot-password')}
+              >
+                Forgot Password?
+              </button>
+            </div>
+
+            {/* Primary Sign In Button */}
+            <button type="submit" className="signin-primary-btn">
+              Sign In
+            </button>
+          </form>
+
+          {/* OR Divider */}
+          <div className="signin-divider">
+            <span>OR</span>
+          </div>
+
+          {/* Alternate 1: Sign in with Email */}
+          <button
+            type="button"
+            className="signin-alt-btn"
+            onClick={() => setActiveMethod('email')}
+          >
+            <Mail size={16} />
+            <span>Sign in With Email</span>
+          </button>
+
+          {/* Alternate 2: Sign in with Phone */}
+          <button
+            type="button"
+            className="signin-alt-btn"
+            onClick={() => setActiveMethod('phone')}
+          >
+            <Phone size={16} />
+            <span>Sign in With Phone</span>
+          </button>
+
+          {/* Footer */}
+          <div className="signin-footer">
+            <span>Don't have an account?</span>
+            <button
+              type="button"
+              className="signin-footer-link"
+              onClick={() => navigate('/signup')}
+            >
+              Sign Up Here
+            </button>
+          </div>
+        </div>
       )}
-    </AuthLayout>
+    </div>
   );
 }

@@ -17,8 +17,8 @@ function MainApp() {
     setIsEmptyState(prev => !prev);
   };
 
-  const isOnboarding = location.pathname === '/onboarding' || location.pathname === '/';
-  const statusTheme = isOnboarding ? 'white' : 'dark';
+  const isDarkTop = location.pathname === '/onboarding' || location.pathname === '/' || location.pathname === '/signin';
+  const statusTheme = isDarkTop ? 'white' : 'dark';
 
   return (
     <div className="app-container">
@@ -27,9 +27,9 @@ function MainApp() {
         theme={statusTheme}
         time="08:15"
         style={
-          isOnboarding
-            ? { position: 'absolute', top: 0, left: 0, right: 0 }
-            : { position: 'relative', background: '#FFFFFF' }
+          isDarkTop
+            ? { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 100 }
+            : { position: 'relative', background: '#FFFFFF', zIndex: 100 }
         }
       />
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bell, Check, Search, Layers } from 'lucide-react';
+import { Bell, Check, MessageSquare, Layers } from 'lucide-react';
 import { currentUser } from '../../data/mockData';
 
 export default function HomeHeader({
@@ -13,8 +13,9 @@ export default function HomeHeader({
       <div className="home-user-info">
         <div className="home-avatar-wrap">
           <img src={currentUser.avatar} alt={currentUser.name} className="home-avatar-img" />
-          <div className="home-verified-badge">
-            <Check size={10} strokeWidth={3} />
+          {/* Blue Verified Badge matching Figma 1:1 */}
+          <div className="home-verified-badge" style={{ background: '#3B82F6' }}>
+            <Check size={9} strokeWidth={3} color="#FFFFFF" />
           </div>
         </div>
         <div>
@@ -33,30 +34,32 @@ export default function HomeHeader({
             title={isEmptyState ? 'Switch to Populated Data' : 'Switch to Empty State'}
             onClick={onToggleEmptyState}
             style={{
-              color: isEmptyState ? 'var(--status-orange)' : 'var(--text-muted)',
-              borderColor: isEmptyState ? 'var(--status-orange)' : 'var(--border-light)'
+              color: isEmptyState ? '#FF8A00' : '#8F95B2',
+              borderColor: isEmptyState ? '#FF8A00' : '#EDEDF8'
             }}
           >
-            <Layers size={18} />
+            <Layers size={17} />
           </button>
         )}
 
+        {/* Chat / Message button matching Figma */}
         <button
           type="button"
           className="home-icon-btn"
-          aria-label="Search"
-          onClick={() => alert('Search feature: Quick search tasks, colleagues, policies')}
+          aria-label="Messages"
+          onClick={() => alert('Chat & Messages opened')}
         >
-          <Search size={18} />
+          <MessageSquare size={17} />
         </button>
 
+        {/* Notifications button */}
         <button
           type="button"
           className="home-icon-btn"
           aria-label="Notifications"
           onClick={onOpenNotifications}
         >
-          <Bell size={18} />
+          <Bell size={17} />
           {unreadCount > 0 && <span className="home-notification-badge" />}
         </button>
       </div>
