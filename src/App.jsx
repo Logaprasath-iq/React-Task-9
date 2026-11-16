@@ -116,6 +116,30 @@ function MainApp() {
               />
             }
           />
+          <Route
+            path="/burnout-stats"
+            element={
+              <Home
+                isEmptyState={isEmptyState}
+                onToggleEmptyState={toggleEmptyState}
+                activeTab="tasks"
+                initialTaskSubScreen="burnout-stats"
+                onTabChange={setCurrentHomeTab}
+              />
+            }
+          />
+          <Route
+            path="/tasks/burnout-stats"
+            element={
+              <Home
+                isEmptyState={isEmptyState}
+                onToggleEmptyState={toggleEmptyState}
+                activeTab="tasks"
+                initialTaskSubScreen="burnout-stats"
+                onTabChange={setCurrentHomeTab}
+              />
+            }
+          />
           <Route path="*" element={<Navigate to="/onboarding" replace />} />
         </Routes>
       </div>

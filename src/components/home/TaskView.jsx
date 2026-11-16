@@ -65,10 +65,14 @@ export default function TaskView({
   onSubScreenChange: propOnSubScreenChange
 }) {
   // Navigation within the Task module:
-  // 'main' | 'create-task' | 'details' | 'zoom'
+  // 'main' | 'create-task' | 'details' | 'zoom' | 'burnout-stats'
   const [internalSubScreen, setInternalSubScreen] = useState('main');
   const subScreen = propSubScreen !== undefined ? propSubScreen : internalSubScreen;
   const setSubScreen = propOnSubScreenChange || setInternalSubScreen;
+
+  // Burnout stats interactive selection states (Sprint 4 and August selected by default matching Figma)
+  const [selectedSprint, setSelectedSprint] = useState(4);
+  const [selectedMonth, setSelectedMonth] = useState('Aug');
 
   // Active filter tab: 'all' | 'todo' | 'inprogress' | 'finish'
   const [activeTabFilter, setActiveTabFilter] = useState('all');
@@ -223,6 +227,304 @@ export default function TaskView({
     if (activeTabFilter === 'finish') return t.status === 'Done';
     return true;
   });
+
+  // =========================================================================
+  // SUB-SCREEN 5: BURNOUT STATS (Figma Frame TaskMenu/BurnoutStats)
+  // =========================================================================
+  if (subScreen === 'burnout-stats') {
+    const sprintData = [
+      { id: 1, label: 'Sprint 1', val: 92 },
+      { id: 2, label: 'Sprint 2', val: 102 },
+      { id: 3, label: 'Sprint 3', val: 96 },
+      { id: 4, label: 'Sprint 4', val: 113 },
+      { id: 5, label: 'Sprint 5', val: 105 }
+    ];
+
+    const periodData = [
+      { id: 'May', label: 'May', hrs: 40 },
+      { id: 'Jun', label: 'Jun', hrs: 41 },
+      { id: 'Jul', label: 'Jul', hrs: 40 },
+      { id: 'Aug', label: 'Aug', hrs: 46 },
+      { id: 'Sept', label: 'Sept', hrs: 41 }
+    ];
+
+    return (
+      <div className="burnout-stats-screen">
+        {/* Header with circular back button and centered title */}
+        <div className="burnout-header">
+          <button
+            type="button"
+            className="task-round-back-btn"
+            onClick={() => setSubScreen('main')}
+            aria-label="Back to Task Menu"
+          >
+            <ArrowLeft size={18} />
+          </button>
+          <h2 className="burnout-top-title">Burnout Stats</h2>
+          <div style={{ width: '32px' }} />
+        </div>
+
+        {/* Card 1: Burnout Stats Status Card */}
+        <div className="burnout-stats-card" style={{ margin: '0 0 14px' }}>
+          <div className="burnout-card-header">
+            <span className="burnout-card-title">Burnout Stats</span>
+            <span className="burnout-tag-good">Good</span>
+          </div>
+          <p className="burnout-card-desc">
+            You've maintain your task at the right pace! keep it up!
+          </p>
+          <div className="burnout-progress-row">
+            <span className="burnout-emoji" role="img" aria-label="Good Pace">😊</span>
+            <div className="burnout-progress-track">
+              <div className="burnout-progress-fill good" style={{ width: '42%' }} />
+            </div>
+          </div>
+        </div>
+
+        {/* Card 2: Working Level Story Point Bar Chart */}
+        <div className="burnout-chart-card">
+          <div className="burnout-chart-header">
+            <h3 className="burnout-chart-title">Working Level</h3>
+            <p className="burnout-chart-sub">Your story point so far</p>
+          </div>
+
+          <div className="burnout-svg-container">
+            <svg
+              viewBox="0 0 320 170"
+              className="burnout-chart-svg"
+              preserveAspectRatio="xMidYMid meet"
+            >
+              {/* Dashed Horizontal Gridlines for 120, 110, 100, 90, 80 */}
+              {[
+                { val: 120, y: 24 },
+                { val: 110, y: 52 },
+                { val: 100, y: 80 },
+                { val: 90, y: 108 },
+                { val: 80, y: 136 }
+              ].map((grid) => (
+                <g key={grid.val}>
+                  <text
+                    x="28"
+                    y={grid.y + 3.5}
+                    textAnchor="end"
+                    fill="#8F95B2"
+                    fontSize="10"
+                    fontWeight="500"
+                    fontFamily="Plus Jakarta Sans, sans-serif"
+                  >
+                    {grid.val}
+                  </text>
+                  <line
+                    x1="36"
+                    y1={grid.y}
+                    x2="310"
+                    y2={grid.y}
+                    stroke="#EDEDF8"
+                    strokeDasharray="3 3"
+                    strokeWidth="1"
+                  />
+                </g>
+              ))}
+
+              {/* Sprint Bars */}
+              {sprintData.map((sprint, idx) => {
+                const centers = [68, 120, 171, 223, 274];
+                const cx = centers[idx];
+                const isSelected = selectedSprint === sprint.id;
+                // Base y for 80 is 136, scale is 2.8px per point
+                const barTop = 136 - (sprint.val - 80) * 2.8;
+                const barHeight = 136 - barTop;
+
+                return (
+                  <g
+                    key={sprint.id}
+                    onClick={() => setSelectedSprint(sprint.id)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {/* Value Badge above active bar */}
+                    {isSelected && (
+                      <text
+                        x={cx}
+                        y={barTop - 8}
+                        textAnchor="middle"
+                        fill="#7146FD"
+                        fontSize="11"
+                        fontWeight="800"
+                        fontFamily="Plus Jakarta Sans, sans-serif"
+                      >
+                        {sprint.val}
+                      </text>
+                    )}
+
+                    {/* Bar Rect */}
+                    <rect
+                      x={cx - 9}
+                      y={barTop}
+                      width="18"
+                      height={barHeight}
+                      rx="5"
+                      fill={isSelected ? '#7146FD' : '#EDEDF8'}
+                      style={{ transition: 'all 0.25s ease' }}
+                    />
+
+                    {/* X-Axis Sprint Label */}
+                    <text
+                      x={cx}
+                      y="156"
+                      textAnchor="middle"
+                      fill={isSelected ? '#7146FD' : '#8F95B2'}
+                      fontSize="10"
+                      fontWeight={isSelected ? '700' : '500'}
+                      fontFamily="Plus Jakarta Sans, sans-serif"
+                    >
+                      {sprint.label}
+                    </text>
+                  </g>
+                );
+              })}
+            </svg>
+          </div>
+        </div>
+
+        {/* Card 3: Working Period Area Line Chart */}
+        <div className="burnout-chart-card">
+          <div className="burnout-chart-header">
+            <h3 className="burnout-chart-title">Working Period</h3>
+            <p className="burnout-chart-sub">Average your working period</p>
+          </div>
+
+          <div className="burnout-svg-container">
+            <svg
+              viewBox="0 0 320 170"
+              className="burnout-chart-svg"
+              preserveAspectRatio="xMidYMid meet"
+            >
+              <defs>
+                <linearGradient id="purpleAreaGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#7146FD" stopOpacity="0.25" />
+                  <stop offset="100%" stopColor="#7146FD" stopOpacity="0.0" />
+                </linearGradient>
+              </defs>
+
+              {/* Dashed Horizontal Gridlines for 60, 50, 40, 30, 20 hrs */}
+              {[
+                { label: '60 hrs', y: 24 },
+                { label: '50 hrs', y: 52 },
+                { label: '40 hrs', y: 80 },
+                { label: '30 hrs', y: 108 },
+                { label: '20 hrs', y: 136 }
+              ].map((grid) => (
+                <g key={grid.label}>
+                  <text
+                    x="38"
+                    y={grid.y + 3.5}
+                    textAnchor="end"
+                    fill="#8F95B2"
+                    fontSize="10"
+                    fontWeight="500"
+                    fontFamily="Plus Jakarta Sans, sans-serif"
+                  >
+                    {grid.label}
+                  </text>
+                  <line
+                    x1="46"
+                    y1={grid.y}
+                    x2="310"
+                    y2={grid.y}
+                    stroke="#EDEDF8"
+                    strokeDasharray="3 3"
+                    strokeWidth="1"
+                  />
+                </g>
+              ))}
+
+              {/* Area Gradient Fill */}
+              <path
+                d="M 68 80 C 88 80, 100 77.2, 120 77.2 C 140 77.2, 150 80, 171 80 C 190 80, 205 63.2, 223 63.2 C 242 63.2, 255 77.2, 274 77.2 L 274 136 L 68 136 Z"
+                fill="url(#purpleAreaGradient)"
+              />
+
+              {/* Smooth Curve Line */}
+              <path
+                d="M 68 80 C 88 80, 100 77.2, 120 77.2 C 140 77.2, 150 80, 171 80 C 190 80, 205 63.2, 223 63.2 C 242 63.2, 255 77.2, 274 77.2"
+                fill="none"
+                stroke="#7146FD"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+
+              {/* Month Points & Labels */}
+              {periodData.map((period, idx) => {
+                const centers = [68, 120, 171, 223, 274];
+                const cx = centers[idx];
+                // Base 20 hrs is y=136, 10 hrs is 28px -> 2.8px per hr
+                const cy = 136 - (period.hrs - 20) * 2.8;
+                const isSelected = selectedMonth === period.id;
+
+                return (
+                  <g
+                    key={period.id}
+                    onClick={() => setSelectedMonth(period.id)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {/* Highlight Value Badge above selected point */}
+                    {isSelected && (
+                      <text
+                        x={cx}
+                        y={cy - 12}
+                        textAnchor="middle"
+                        fill="#7146FD"
+                        fontSize="10.5"
+                        fontWeight="800"
+                        fontFamily="Plus Jakarta Sans, sans-serif"
+                      >
+                        {period.hrs} hrs
+                      </text>
+                    )}
+
+                    {/* Outer glow circle for selected */}
+                    {isSelected && (
+                      <circle
+                        cx={cx}
+                        cy={cy}
+                        r="7.5"
+                        fill="#7146FD"
+                        opacity="0.18"
+                      />
+                    )}
+
+                    {/* Point Circle */}
+                    <circle
+                      cx={cx}
+                      cy={cy}
+                      r={isSelected ? 4.5 : 3.5}
+                      fill={isSelected ? '#7146FD' : '#FFFFFF'}
+                      stroke="#7146FD"
+                      strokeWidth={isSelected ? 0 : 2}
+                    />
+
+                    {/* X-Axis Month Label */}
+                    <text
+                      x={cx}
+                      y="156"
+                      textAnchor="middle"
+                      fill={isSelected ? '#7146FD' : '#8F95B2'}
+                      fontSize="10"
+                      fontWeight={isSelected ? '700' : '500'}
+                      fontFamily="Plus Jakarta Sans, sans-serif"
+                    >
+                      {period.label}
+                    </text>
+                  </g>
+                );
+              })}
+            </svg>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // =========================================================================
   // SUB-SCREEN 4: FULL SCREEN IMAGE ZOOM LIGHTBOX (Figma DetailTask/Image)
@@ -797,7 +1099,11 @@ export default function TaskView({
       </div>
 
       {/* Burnout Stats Card */}
-      <div className="burnout-stats-card">
+      <div
+        className="burnout-stats-card clickable"
+        onClick={() => setSubScreen('burnout-stats')}
+        title="View Burnout Stats"
+      >
         <div className="burnout-card-header">
           <span className="burnout-card-title">Sprint 20 - Burnout Stats</span>
           <span className="burnout-tag-poor">Poor</span>

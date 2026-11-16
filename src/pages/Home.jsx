@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import HomeHeader from '../components/home/HomeHeader';
 import BottomNavigation from '../components/home/BottomNavigation';
 import HomeView from '../components/home/HomeView';
@@ -16,7 +16,8 @@ export default function Home({
   isEmptyState = false,
   onToggleEmptyState,
   activeTab: propTab,
-  onTabChange: propOnTabChange
+  onTabChange: propOnTabChange,
+  initialTaskSubScreen = 'main'
 }) {
   const [internalTab, setInternalTab] = useState('home');
   const activeTab = propTab !== undefined ? propTab : internalTab;
@@ -27,8 +28,14 @@ export default function Home({
   const [clockInSubScreen, setClockInSubScreen] = useState('main');
 
   // Sub-screen state inside the Task Management flow:
-  // 'main' | 'create-task' | 'details' | 'zoom'
-  const [taskSubScreen, setTaskSubScreen] = useState('main');
+  // 'main' | 'create-task' | 'details' | 'zoom' | 'burnout-stats'
+  const [taskSubScreen, setTaskSubScreen] = useState(initialTaskSubScreen);
+
+  useEffect(() => {
+    if (initialTaskSubScreen) {
+      setTaskSubScreen(initialTaskSubScreen);
+    }
+  }, [initialTaskSubScreen]);
 
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
