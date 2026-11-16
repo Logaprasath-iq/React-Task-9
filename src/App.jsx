@@ -6,6 +6,7 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import ForgotPassword from './pages/ForgotPassword';
 import Home from './pages/Home';
+import Profile from './pages/Profile';
 import './styles/global.css';
 
 function MainApp() {
@@ -24,7 +25,8 @@ function MainApp() {
     location.pathname.startsWith('/employee') ||
     location.pathname === '/forgot-password' ||
     location.pathname === '/signup/profile' ||
-    location.pathname === '/signup/badges';
+    location.pathname === '/signup/badges' ||
+    location.pathname === '/profile';
   const statusTheme = isDarkTop ? 'white' : 'dark';
 
   return (
@@ -232,6 +234,15 @@ function MainApp() {
               />
             }
           />
+
+          {/* Profile Routes matching Figma 1:1 */}
+          <Route path="/profile" element={<Profile initialSubScreen="main" />} />
+          <Route path="/my-profile" element={<Profile initialSubScreen="main" />} />
+          <Route path="/profile/personal-data" element={<Profile initialSubScreen="personal-data" />} />
+          <Route path="/profile/office-assets" element={<Profile initialSubScreen="office-assets" />} />
+          <Route path="/profile/payroll" element={<Profile initialSubScreen="payroll" />} />
+          <Route path="/profile/change-password" element={<Profile initialSubScreen="change-password" />} />
+
           <Route path="*" element={<Navigate to="/onboarding" replace />} />
         </Routes>
       </div>

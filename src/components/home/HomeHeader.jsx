@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Bell, MessageSquare } from 'lucide-react';
 import { currentUser } from '../../data/mockData';
 
@@ -8,9 +9,16 @@ export default function HomeHeader({
   isEmptyState = false,
   onToggleEmptyState = null
 }) {
+  const navigate = useNavigate();
+
   return (
     <header className="home-header" style={{ background: '#FFFFFF', padding: '14px 20px', borderBottom: '1px solid #F0F1F7' }}>
-      <div className="home-user-info" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div
+        className="home-user-info"
+        style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}
+        onClick={() => navigate('/profile')}
+        title="View My Profile"
+      >
         <div className="home-avatar-wrap" style={{ width: '42px', height: '42px', position: 'relative' }}>
           <img
             src={currentUser.avatar}
