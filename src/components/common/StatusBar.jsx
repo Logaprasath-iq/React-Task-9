@@ -54,9 +54,9 @@ export default function StatusBar({ theme = 'white', time = '08:15', style = {} 
         {/* Battery Icon */}
         <svg width="24" height="12" viewBox="0 0 24 12" fill={color}>
           {/* Battery Outer Border */}
-          <rect x="0.5" y="0.5" width="20" height="11" rx="3" fill="none" stroke={color} strokeWidth="1.2" />
-          {/* Battery Level Fill */}
-          <rect x="2.5" y="2.5" width="13.5" height="7" rx="1.5" fill={color} />
+          <rect x="0.5" y="0.5" width="20" height="11" rx="3.2" fill="none" stroke={color} strokeWidth="1.2" />
+          {/* Battery Level Fill - 100% full solid white matching Figma screenshot */}
+          <rect x="2.5" y="2.5" width="16" height="7" rx="1.6" fill={color} />
           {/* Battery Terminal Tip */}
           <path d="M22 4C22.6 4.3 23 4.9 23 5.5V6.5C23 7.1 22.6 7.7 22 8" stroke={color} strokeWidth="1.2" strokeLinecap="round" fill="none" />
         </svg>

@@ -27,10 +27,10 @@ export default function OnboardingScreen({
           <h1 className="onboarding-title">{slide.title}</h1>
           <p className="onboarding-description">{slide.description}</p>
 
-          {/* Indicator row: Shown on steps 1, 2, 3; omitted on final step 4 matching Figma */}
+          {/* Indicator row: 3 bars on steps 1, 2, 3 matching Figma exactly; omitted on step 4 */}
           {!isLastStep && (
             <div className="page-indicator-row">
-              {[1, 2, 3, 4].map((stepNum, idx) => {
+              {[1, 2, 3].map((stepNum, idx) => {
                 const isActive = stepNum === currentStep;
                 return (
                   <button
