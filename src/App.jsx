@@ -186,6 +186,52 @@ function MainApp() {
               />
             }
           />
+          <Route
+            path="/leave"
+            element={
+              <Home
+                isEmptyState={isEmptyState}
+                onToggleEmptyState={toggleEmptyState}
+                activeTab="leave"
+                onTabChange={setCurrentHomeTab}
+              />
+            }
+          />
+          <Route
+            path="/leaves"
+            element={
+              <Home
+                isEmptyState={isEmptyState}
+                onToggleEmptyState={toggleEmptyState}
+                activeTab="leave"
+                onTabChange={setCurrentHomeTab}
+              />
+            }
+          />
+          <Route
+            path="/leave/submit"
+            element={
+              <Home
+                isEmptyState={isEmptyState}
+                onToggleEmptyState={toggleEmptyState}
+                activeTab="leave"
+                initialLeaveSubScreen="submit-leave"
+                onTabChange={setCurrentHomeTab}
+              />
+            }
+          />
+          <Route
+            path="/submit-leave"
+            element={
+              <Home
+                isEmptyState={isEmptyState}
+                onToggleEmptyState={toggleEmptyState}
+                activeTab="leave"
+                initialLeaveSubScreen="submit-leave"
+                onTabChange={setCurrentHomeTab}
+              />
+            }
+          />
           <Route path="*" element={<Navigate to="/onboarding" replace />} />
         </Routes>
       </div>

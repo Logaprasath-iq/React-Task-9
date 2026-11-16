@@ -1,0 +1,487 @@
+/* =========================================================================
+   WORKMATE LEAVE SUMMARY & SUBMIT LEAVE - FIGMA 1:1 REPRODUCTION
+   ========================================================================= */
+
+.leave-screen-wrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  background: #F9F9FC;
+  position: relative;
+  box-sizing: border-box;
+  padding-bottom: 24px;
+}
+
+/* =========================================================================
+   1. PURPLE HEADER BANNER WITH SUITCASE & RAINBOW
+   ========================================================================= */
+.leave-purple-banner {
+  background: #7146FD;
+  padding: 20px 20px 52px;
+  color: #FFFFFF;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 0 0 28px 28px;
+}
+
+.leave-banner-title {
+  font-size: 19px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 4px;
+  letter-spacing: -0.2px;
+}
+
+.leave-banner-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* =========================================================================
+   2. FLOATING TOTAL LEAVE CARD (2-COLUMN STATS)
+   ========================================================================= */
+.leave-summary-card {
+  background: #FFFFFF;
+  border-radius: 20px;
+  margin: -36px 16px 14px;
+  padding: 18px 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  border: 1px solid #EDEDF8;
+  position: relative;
+  z-index: 10;
+}
+
+.leave-summary-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #1A1D2E;
+  margin-bottom: 2px;
+}
+
+.leave-summary-sub {
+  font-size: 11px;
+  color: #8F95B2;
+  margin-bottom: 14px;
+}
+
+.leave-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.leave-stat-box {
+  background: #F9F9FC;
+  border: 1px solid #EDEDF8;
+  border-radius: 14px;
+  padding: 12px 14px;
+  text-align: left;
+}
+
+.leave-stat-label {
+  font-size: 11px;
+  color: #8F95B2;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.leave-stat-val {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1A1D2E;
+  margin-top: 4px;
+}
+
+/* =========================================================================
+   3. FILTER TABS ROW
+   ========================================================================= */
+.leave-tabs-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  margin-bottom: 14px;
+}
+
+.leave-tab-btn {
+  background: #FFFFFF;
+  border: 1px solid #EDEDF8;
+  color: #8F95B2;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 18px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.leave-tab-btn.active {
+  background: #7146FD;
+  border-color: #7146FD;
+  color: #FFFFFF;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(113, 70, 253, 0.25);
+}
+
+.leave-tab-badge {
+  background: #FF5252;
+  color: #FFFFFF;
+  font-size: 9.5px;
+  font-weight: 800;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================================================================
+   4. LEAVE LIST & EMPTY STATE
+   ========================================================================= */
+.leave-list-wrap {
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.leave-section-header-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #1A1D2E;
+  margin: 0 0 2px;
+}
+
+.leave-section-header-sub {
+  font-size: 11px;
+  color: #8F95B2;
+  margin: 0 0 12px;
+}
+
+/* Empty State Card */
+.leave-empty-card {
+  background: #FFFFFF;
+  border-radius: 18px;
+  border: 1.5px dashed #E3DEFC;
+  padding: 36px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.02);
+}
+
+.leave-empty-icon-wrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #F4F2FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7146FD;
+  margin-bottom: 16px;
+}
+
+.leave-empty-title {
+  font-size: 14.5px;
+  font-weight: 800;
+  color: #1A1D2E;
+  margin: 0 0 6px;
+}
+
+.leave-empty-desc {
+  font-size: 11.5px;
+  color: #8F95B2;
+  line-height: 1.5;
+  max-width: 260px;
+  margin: 0;
+}
+
+/* Regular Leave Item Card */
+.leave-item-card {
+  background: #FFFFFF;
+  border-radius: 16px;
+  border: 1px solid #EDEDF8;
+  padding: 14px 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
+}
+
+.leave-item-date-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #1A1D2E;
+  margin-bottom: 12px;
+}
+
+.leave-item-data-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.leave-data-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.leave-data-col.right {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.leave-data-label {
+  font-size: 10.5px;
+  color: #8F95B2;
+  font-weight: 500;
+}
+
+.leave-data-val {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #1A1D2E;
+}
+
+.leave-item-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #F0F1F8;
+  font-size: 11px;
+}
+
+.leave-status-approved {
+  color: #10B981;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.leave-status-rejected {
+  color: #FF5252;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.leave-approver-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #8F95B2;
+  font-size: 11px;
+}
+
+.leave-approver-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.leave-approver-name {
+  color: #1A1D2E;
+  font-weight: 600;
+}
+
+/* =========================================================================
+   5. SUBMIT LEAVE SCREEN (Figma Frame LeaveSummary/SubmitLeave)
+   ========================================================================= */
+.submit-leave-screen {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  background: #FFFFFF;
+  padding: 16px 20px 32px;
+  box-sizing: border-box;
+}
+
+.submit-leave-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.submit-leave-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #1A1D2E;
+  margin: 0;
+  text-align: center;
+}
+
+.submit-leave-section-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #1A1D2E;
+  margin-bottom: 2px;
+}
+
+.submit-leave-section-sub {
+  font-size: 11px;
+  color: #8F95B2;
+  margin-bottom: 16px;
+}
+
+/* Calendar Date Range Picker */
+.calendar-modal-container {
+  width: 100%;
+  user-select: none;
+}
+
+.calendar-header-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.calendar-month-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #1A1D2E;
+}
+
+.calendar-nav-arrow {
+  background: none;
+  border: none;
+  color: #7146FD;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar-weekdays-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: #8F95B2;
+  margin-bottom: 8px;
+}
+
+.calendar-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  row-gap: 6px;
+  margin-bottom: 18px;
+}
+
+.calendar-day-cell {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #1A1D2E;
+  position: relative;
+  transition: all 0.15s ease;
+}
+
+.calendar-day-cell.other-month {
+  color: #D1D5DB;
+}
+
+.calendar-day-cell.in-range {
+  background: #F3EFFF;
+  color: #7146FD;
+}
+
+.calendar-day-cell.range-start {
+  background: #7146FD;
+  color: #FFFFFF;
+  border-radius: 50% 0 0 50%;
+  font-weight: 800;
+}
+
+.calendar-day-cell.range-end {
+  background: #7146FD;
+  color: #FFFFFF;
+  border-radius: 0 50% 50% 0;
+  font-weight: 800;
+}
+
+.calendar-day-cell.range-single {
+  background: #7146FD;
+  color: #FFFFFF;
+  border-radius: 50%;
+  font-weight: 800;
+}
+
+/* Phone Input with Country Code */
+.phone-input-group {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid #EDEDF8;
+  border-radius: 14px;
+  height: 48px;
+  background: #FFFFFF;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.phone-input-group:focus-within {
+  border-color: #7146FD;
+  box-shadow: 0 0 0 3px rgba(113, 70, 253, 0.12);
+}
+
+.phone-country-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 12px;
+  height: 100%;
+  background: #F9F9FC;
+  border: none;
+  border-right: 1.5px solid #EDEDF8;
+  font-size: 12px;
+  font-weight: 700;
+  color: #1A1D2E;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.phone-number-field {
+  flex: 1;
+  height: 100%;
+  border: none;
+  outline: none;
+  padding: 0 14px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1A1D2E;
+  background: transparent;
+}
+
+.phone-number-field::placeholder {
+  color: #8F95B2;
+  font-weight: 500;
+}

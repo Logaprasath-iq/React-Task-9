@@ -18,7 +18,8 @@ export default function Home({
   activeTab: propTab,
   onTabChange: propOnTabChange,
   initialTaskSubScreen = 'main',
-  initialExpenseSubScreen = 'main'
+  initialExpenseSubScreen = 'main',
+  initialLeaveSubScreen = 'main'
 }) {
   const [internalTab, setInternalTab] = useState('home');
   const activeTab = propTab !== undefined ? propTab : internalTab;
@@ -36,6 +37,10 @@ export default function Home({
   // 'main' | 'submit-expense'
   const [expenseSubScreen, setExpenseSubScreen] = useState(initialExpenseSubScreen);
 
+  // Sub-screen state inside the Leave flow:
+  // 'main' | 'submit-leave'
+  const [leaveSubScreen, setLeaveSubScreen] = useState(initialLeaveSubScreen);
+
   useEffect(() => {
     if (initialTaskSubScreen) {
       setTaskSubScreen(initialTaskSubScreen);
@@ -48,6 +53,12 @@ export default function Home({
     }
   }, [initialExpenseSubScreen]);
 
+  useEffect(() => {
+    if (initialLeaveSubScreen) {
+      setLeaveSubScreen(initialLeaveSubScreen);
+    }
+  }, [initialLeaveSubScreen]);
+
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
   const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
@@ -57,7 +68,8 @@ export default function Home({
   const isBottomNavVisible =
     !(activeTab === 'clockin' && clockInSubScreen !== 'main') &&
     !(activeTab === 'tasks' && taskSubScreen !== 'main') &&
-    !(activeTab === 'expense' && expenseSubScreen !== 'main');
+    !(activeTab === 'expense' && expenseSubScreen !== 'main') &&
+    !(activeTab === 'leave' && leaveSubScreen !== 'main');
 
   return (
     <div
@@ -115,7 +127,8 @@ export default function Home({
         {activeTab === 'leave' && (
           <LeaveView
             isEmpty={isEmptyState}
-            onOpenSubmitLeave={() => setIsLeaveModalOpen(true)}
+            subScreen={leaveSubScreen}
+            onSubScreenChange={setLeaveSubScreen}
           />
         )}
       </div>
@@ -129,6 +142,7 @@ export default function Home({
             if (tab === 'clockin') setClockInSubScreen('main');
             if (tab === 'tasks') setTaskSubScreen('main');
             if (tab === 'expense') setExpenseSubScreen('main');
+            if (tab === 'leave') setLeaveSubScreen('main');
           }}
         />
       )}
